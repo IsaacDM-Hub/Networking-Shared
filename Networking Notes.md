@@ -407,7 +407,7 @@ BPDU Guard
 
 DHCP Snooping
 
-802.1x
+802.1x - Way to manage logins and restrict access to logins. Server/Switch will athenticate every user 
 
 Dynamic ARP inspection (DAI)
 
