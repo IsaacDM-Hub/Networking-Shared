@@ -235,36 +235,36 @@ Cisco uses . for every 4chars
   > Class E (240-255) not used
 > Classless subnetting (CIDR)
 > NAT
-> TTL
+> # TTL
   > Linux (64)
   > Windows (128)
   > Network Devices
-> Types
-  > Unicast
-  > Multicast
-  > Broadcast
-> Scopes
+> # Types
+  > Unicast: any class a-c
+  > Multicast: class D
+  > Broadcast:  any ip where the host portion is all on
+> # ipv4 Scopes
   > Public
   > Private (RFC 1918)
   > Loopback (127.0.0.1)
   > Link-Local (APIPA)
   > Multicast (class D)
-> Fragmentation
+> ## ipv4 Fragmentation
   # Breaking up packets from higher MTU to lower MTU (Maximum Transmission Unit) network
   # Performed by routers
   # MF Flag is on from 1st until 2nd to last
   # offset is on from 2nd until the last
   # offset = (MTU - (IHL x 4)) / 8
-> Auto Config
+> # Auto Config
   > APIPA
   > DHCP
-    > DORA
-> Vulnerability 
+  > DORA
+> # Vulnerability 
   > Rogue DHCP
   > Evil Twin
   > DHCP Starvation 
     # Denial of service
-IPv6 (Standardized 2017)
+## IPv6 (Standardized 2017)
 > Fragmentation
   > # Does not support fragmentation within its header
   > # Routers do not fragment IPv6 packets !!!!!!!!!!!!!1
@@ -272,22 +272,25 @@ IPv6 (Standardized 2017)
   > # Source can use IPv6 fragmentation extension header
 > Addressing
   > # 128 bit addressing
+>  # 64-bit prefix and interface ID
+>  # 340 undeillian addresses 
 > Subnetting
   > # Organizations assigned a 48-bit Prefix by IANA
 > Types
   > Unicast
   > Multicast
   > Anycast
-ICMPv4
+## ICMPv4
   # IPv4 Protocol
-> OS Fingerprinting
+> ## OS Fingerprinting
   > Linux
-    > # Default Size: 64 Bytes
-    > # Payload Message: nfo/./.345/.,0u98fgoij
+    >  # default TTL is 64
+    >  # Default Size: 64 Bytes
+    >  # Payload Message: nfo/./.345/.,0u98fgoij (numbers and symbols)
   > Windows:
-    > # Default Size: 40 Bytes
-    > # Payload Message: abcdefghijklmnopqrstuvwxyz
-> Traceroute
+    > # Default Size: 40 Bytes and TTL is 128
+    > # Payload Message: abcdefghijklmnopqrstuvwxyz (letters only)
+> # icmpv4 Traceroute
   > # Identifies Hops between the source and the destination
   > # Uses incrimenting ttls
   > # Uses ICMP (windows default), UDP (linux default), TCP
@@ -299,16 +302,23 @@ ICMPv4
   > # Map Network w/ IP unreachables
   > # ICMP Covert Channels
 
+## NDP
+	type 133,134,135,136,137
+ > RTR solicitation 133
+ > RTR ADVERT 134
+ > neighbor solicitation 135
+ > neighbor ADVERT 136
+ > redirect 137
 (Classful)
   > # Do not Carry subnet mask information within the routing updates
   > # Exchange routing updaates at the regular time intervals
 (Classless)
   > # Opposite of both
 
-Routing Protocol
+## Routing Protocol
 > # Used Between Layer 3 devices to learn and advertise routes and maintain routing tables
 > # Routes a routed protocol for learning and maintaining routing table
-Routed Protocol
+## Routed Protocol
 > # Used between Routers to direct use traffic. It is also called network protocols
 > # Routed by routing protocols
 
