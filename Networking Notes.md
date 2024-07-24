@@ -1084,3 +1084,20 @@ Inject manipulated messages
 
 MitM by becoming active forwarder
 ```
+
+
+## FIRST HOP REDUNDANCY PROTOCOL
+### HOT STANDBY ROUTER PROTOCOL (HSRP)
+```
+Provides default gateway and a backup router
+```
+
+### VIRTUAL ROUTER REDUNDANCY PROTOCOL (VRRP)
+```
+Open standard to Cisco's HSRP, Same Functionality
+```
+
+### Gateway Load Balancing protocol (GLBP)
+```
+Supports arbitray load balancing in addition to redundancy across gatewats, cisco proprietary
+```
