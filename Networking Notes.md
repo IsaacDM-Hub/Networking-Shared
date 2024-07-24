@@ -1075,3 +1075,12 @@ Monitoring misdirected traffic (change in AS path from tools like Looking Glass)
 
 BGPSec
 ```
+
+## FHRP ATTACK
+```
+Intercept the FHRP message exchange
+
+Inject manipulated messages
+
+MitM by becoming active forwarder
+```
