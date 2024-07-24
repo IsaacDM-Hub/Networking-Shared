@@ -70,17 +70,17 @@ Format - MTI=, MTIzNA==, MTIzNDU2Nzg=, QmFzZSA2NA==
 ## Lan Topologies and Devices
 ### Topolgies
 ```
-Bus
+Bus - Data will stop at every workstation until it reaches its destination
 
-Star
+Star - Everyone is connected to a single point that distributes information
 
-Ring
+Ring - 1 way everyone connected 
 
-Mesh
+Mesh - Full and Partial. Full everyone is connected directly. Partial Multiple people connected but not every station
 
-Wireless
+Wireless - Like a Star but everyone can connect within the radius 
 
-Hierarchial
+Hierarchial - Like DOD or large organizations
 ```
 
 ### Devices
@@ -102,4 +102,127 @@ Speed        Bit-Time
 1 Gbps       1ns
 10 Gbps      .1ns
 100 Gbps     .01ns
+```
+
+## OSI Layer 2 Protocols
+### LAN TECH (Benefits and Hindrances)
+```
+Technology	Standard
+
+Ethernet    802.3(x)
+
+Wireless    802.11(x)
+
+Token Ring    802.5
+```
+### Data Link Sub-Layers
+```
+MAC - Medium Access Control
+LLC - Logical Link Control
+```
+
+### Message Formatting
+```
+Header - Layer 2 - 7
+Data - Payload
+```
+### ENCAPSULATION AND DECAPSULATION
+```
+How data moves through the layers
+```
+
+## Switch Operation
+```
+Building MAC-Address (CAM) Table
+
+Learns by reading Source MAC addresses
+
+Forwarding Frames
+
+Decision based on Destination MAC address
+
+```
+### Switching Modes
+```
+Cut-Through = Gets to the information as fast as possbile. 
+
+Fragment-Free = Checks entire packet to enusre the data is all there
+
+Store-and-Forward = Store everything, then forward the entire frame to the other side
+```
+## CAM Table Overflow Attack 
+```
+Send frames with bogus source MAC address to switch
+
+Cause switch to fill table with bogus addresses
+
+Switch will not be able to learn new (valid) MAC addresses
+```
+## Describe MAC Addressing 
+```
+Length: 48-bit | 6 byte | 12 Hex
+
+Format:
+
+Windows: 01-23-45-12-34-56
+
+Unix/Linux: 01:23:45:12:34:56
+
+Cisco: 1234.5612.3456
+
+Parts:
+
+OUI - First 24-bits assigned by IANA
+
+Vendor Assigned - Last 24-bits assigned by vendor
+```
+### MAC Adress Types
+```Unicast: One to one
+
+8th bit is off
+
+Multicast: One to many
+
+8th bit is on
+
+Broadcast: One to all
+
+All bits on
+
+```
+### MAC Spoofing 
+```
+Could not be changed at first
+
+Used to be called:
+
+hardware
+
+firmware
+
+burned-in
+
+Now it can be changed w/ software
+```
+## Layer 2 Ethernet
+### VLAN Types 
+```
+Default - VLAN 1
+
+Data - User traffic
+
+Voice - VOIP traffic
+
+Management - Switch and router management
+
+Native - Untagged switch and router traffic
+```
+
+### VLAN Hopping Attack 
+```
+Switch Spoofing (DTP)
+
+Single Tagging
+
+Double Tagging (using native VLAN)
 ```
