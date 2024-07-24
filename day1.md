@@ -1,5 +1,11 @@
 ## day 1
 https://net.cybbh.io/public/networking/latest/02_network/fg.html is the day 1 guide 
+Blue Internet Host
+Student#: student17
+
+Command: ssh student@10.50.29.222 -X
+
+Password: password
 
 ## PDU protocol data unit
 session-application = data
