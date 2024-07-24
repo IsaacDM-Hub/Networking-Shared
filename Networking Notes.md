@@ -66,3 +66,40 @@ Uses ( = ) to represent a null value (max of 2)
 
 Format - MTI=, MTIzNA==, MTIzNDU2Nzg=, QmFzZSA2NA==
 ```
+
+## Lan Topologies and Devices
+### Topolgies
+```
+Bus
+
+Star
+
+Ring
+
+Mesh
+
+Wireless
+
+Hierarchial
+```
+
+### Devices
+```
+Hubs
+
+Repeaters
+
+Switches
+
+Routers
+```
+
+### Ethernet Timing (BIT-TIME)
+```
+Speed        Bit-Time
+10 Mbps      100ns
+100 Mbps     10ns
+1 Gbps       1ns
+10 Gbps      .1ns
+100 Gbps     .01ns
+```
