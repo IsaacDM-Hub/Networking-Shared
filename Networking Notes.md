@@ -369,3 +369,54 @@ Crafted Bridge Protocol Data units (BPDU)
 
 Used to perform a DoS or MitM
 ```
+## PORT Security Modes
+```
+Shutdown (default)
+
+Protect
+
+Restrict
+
+
+PORT SECURITY CAN HELP TO
+Restrict unauthorized access
+
+Limit MAC address learned on port
+
+Prevent CAM Table Overflow attacks
+
+```
+### PORT SECURITY VULNERABILITIES
+```
+Dependant on MAC address
+
+MAC spoofing
+```
+
+## Layer 2 Attack Mitigation Techniques 
+```
+Shutdown unused ports
+
+Enable Port Security
+
+IP Source Guard
+
+Manually assign STP Root
+
+BPDU Guard
+
+DHCP Snooping
+
+802.1x
+
+Dynamic ARP inspection (DAI)
+
+Static CAM entries
+
+Static ARP entries
+
+Disable DTP negotiations
+
+Manually assign Access/Trunk ports
+
+```
