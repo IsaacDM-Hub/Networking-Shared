@@ -1,1 +1,190 @@
+Socket Types
+> Stream Sockets (TCP)    <- (User) Space Sockets
+> Datagram Sockets (UDP)    <- (User) Space Sockets
+> Raw Sockets (Configure)    <- (Kernel) Space Sockets
+  > # Tells hardware to just send it out because we are going to be configuring it. Thats why it requires SUDO
 
+
+User Space
+> # NMAP no switches
+> # TCPDUMP or wireshark to read a file
+> # Using netcat to connect to a listener (Dont use SUDO to banner grab)
+> # Using netcat to create a listener above the well known port range (1024+)
+Kernel Space
+> # Capturing packets on the wire
+> # OS Identification or to set specific flags when scanning
+> # Using scapy to craft or modify a packet for transmission
+> # Using python to craft or modify RAW sockets for transmission
+> # Network devices using routing protocols such as OSPF
+> # Any traffic without Transport Header (ICMP)
+
+
+Python
+> import {module}
+> from {module} import *
+  > # allows to call functions from module like the function was literally inside your code so instead of example.funct() it would just be funct()
+> socket.socket [ SYNTAX: socket.socket( <family>, <type>, <proto> ) ] (import socket)
+> Family
+  > # AF_INET*
+  > # AF_INET6
+  > # AF_UNIX
+    > # What daemons use to speak to hardware
+> Type
+  > # SOCK_STREAM* (TCP)
+  > # SOCK_DGRAM (UDP)
+> Proto
+  > 0*
+  > # IPPROTO_TCP
+  > # IPPROTO_UDP
+  > # IPPROTO_IP
+  > # IPPROTO_ICMP
+  > # IPPROTO_RAW
+> Functions
+  > # connect() [CLIENT-SIDE CONNECTION]
+  > # close() [CLOSES TCP CONNECTION (Client/Server)]
+  > # sendto()
+    > # this sends data to a socket while not already being connected to a remote socket
+
+
+
+Socket Functions
+> Client
+  > socket(family, type, proto)
+  > Connect((ip, port))
+    > # TCP Only
+  > send()
+    > # Send to established Socket
+  > sendto()
+    > # Send to UNenstablished socket
+  > sendall()
+    > # Repeats 'send' until all data sent
+  > recv()
+    > # Receive data from socket
+  > recvfrom()
+    > # Recieve data and socket info
+  > close()
+    > # Close a socket file descriptor
+> Server
+  > socket
+  > setsockpot(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
+  > bind((",port))
+  > listen(1)
+    > # Enable a server to accept TCP connections
+  > accept()
+    > # TCP only
+  > recv()
+    > # Receive data from socket
+  > recvfrom()
+    > # Recieve data and socket info
+  > send()
+    > # Send to established Socket
+  > sendto()
+    > # Send to UNenstablished socket
+  > sendall()
+    > # Repeats 'send' until all data sent
+  > close()
+    > # Close a socket file descriptor
+
+
+
+
+[SOCKET SCRIPTS Stream, Dgram, Ipraw, Tcpraw]
+Stream (What to change)
+  > # Message (Optional)
+Dgram
+  > # Message (Optional)
+IPRaw
+  > # dst_ip
+  > # ip_ver_ihl
+  > # ip_tos
+  > # ip_id
+  > # ip_frag = 0
+  > # ip_ttl
+  > # ip_proto
+  > # Message (Optional)
+TCPRaw
+  > # dst_ip
+  > # dst_ip
+  > # ip_ver_ihl
+  > # ip_tos
+  > # ip_id
+  > # ip_frag = 0
+  > # ip_ttl
+  > # ip_proto
+  > # tcp_src
+  > # tcp_dst
+  > # tcp_ack_seq
+  > # tcp_data_off
+  > # tcp_reserve
+  > # tcp_flags (Optional if you want to just set a hex value instead of individual flags
+  > # tcp_win
+  > # tcp_chk = 0
+  > # tcp_urg_ptr = 0
+  > # Message (Optional)
+
+
+
+Encoding 
+> Text to Hex
+  /> echo "Message" | xxd
+> File to Hex
+  /> xxd file.txt file-encoded.txt
+> Decode file from Hex
+  /> xxd -r file-encoded.txt file-decoded.txt
+> Python Hex Ecoding
+  # import binascii
+  # message = b'Message'
+  # hidden_msg = binascii.hexlify(message)
+
+====================================== METHODOLOGIES ============================================
+
+Net Recon Methodology
+> Host Discovery
+  > # Ruby ping sweep (if ping sweep available)
+  > # NMAP scan if no ping
+> Port Discovery
+  > # NMAP
+  > # nc scan script
+> Port Validation
+  > # Banner grabbing using nc
+> Follow-on actions based on ports found
+  > # if 21 FTP [IP ADDR] connects to ftp server
+    /> passive
+    /> ls
+    /> get [filename]
+  > # if 21 or 80 wget -r IP_ADDRESS (or) wget -r ftp://IP_ADDRESS (or) firefox
+  > # if 22 or 23 CONNECT and PASSIVE RECON
+> PASSIVE RECON
+
+Scan Methodology
+/> nmap -Pn [IP Addr] -T4 -p 21-23,80
+  > # "-Pn" is no host discovery. Its telling nmap that we know its up. No pinging
+  > # Quick Scan Ports 21-23, 80
+  > # Specific ports based on hints/clues found
+  > # Well know port range 1-1023
+  > # which tcpdump wireshark nmap telnet get curl ping
+  > # Chunks of 2000 or first 10000 ports (65535)
+
+Passive Recon Methodology
+/> hostname
+  > # permissions:
+    /> sudo -l
+> Interfaces and subnets
+  /> ip a
+> Neighbors
+  /> ip neigh
+> Files of interest
+  /> find / -iname flag* 2>/dev/null
+  /> find / -name hint*
+> Other listening ports
+  /> ss -ntlp (TCP)
+  /> ss -nulp (UDP)
+> Available Tools
+  /> which
+  /> tcpdump
+  /> wireshark
+  /> nmap
+  /> telnet
+  /> get
+  /> curl
+  /> ping
