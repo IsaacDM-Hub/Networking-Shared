@@ -6,6 +6,7 @@ Student#: student17
 Command: ssh student@10.50.29.222 -X
 
 Password: password
+http://10.50.20.180:8000/challenges
 
 ## PDU protocol data unit
 session-application = data
