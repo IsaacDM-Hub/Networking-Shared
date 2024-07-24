@@ -334,10 +334,11 @@ IGP and EGP
   > # Referred to as inter-AS routing.
   > # Service providers and large companies will interconnect their AS using an EGP.
   > # The Border Gateway Protocol (BGP) is the only currently viable EGP and is the official routing protocol used by the Internet.
-> OSPF
-> RIPv2
-> EIGRP
+> OSPF: cost
+> RIPv2: hop
+> EIGRP: bandwidth,delay,load,reliability
 > ISIS
+> BGP: policy
 
 Distance Vector Routing Protocols
 > # They share entire routing tables with their directly connected neighbors and from these shared tables they determine:
@@ -380,14 +381,15 @@ Dynamic Routing
 > # Choose the best path to remote networks
 > # Recalculate a new path to a remote network should the primary fail
 
-
+first hop redundancy protocol
+	vulnerable to attack via injecting manipulated messages witha MitM attack
 =========================== Layer 4 (Transport) ============================
-Well-Know Ports: 0-1023
-Registered : 1024-49151
-Dynamic: 49152-65535
+## Well-Know Ports: 0-1023
+## Registered : 1024-49151
+## Dynamic: 49152-65535
 
 
-TCP Flags:
+## TCP Flags:
 > CWR - 128
 > ECE - 64
 > URG - 32
