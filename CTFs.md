@@ -213,7 +213,285 @@ A: Exsqueeze me?
 ```
 How many Hops away is the 151.101.64.84 address?
 
-A:
+A: 11
 
-()
+(filter "ip.src==151.101.64.84 && icmp" look at he IPV4 TTL)
+```
+## 25. ICMP – 4
+```
+What is the OS of 10.10.205.253 host based off its Echo Request message to 10.10.0.40?
+
+A: Windows
+
+(Filter "ip.src==10.10.205.253, the info seection is all letters which is only winodws)
+```
+
+## 26. Fragmented – 1
+```
+What is the IP ID of the fragmented ICMP packet in Decimal? (starting at packet 6472)
+
+A: 46544
+
+(Search for the packet, look for the identification)
+```
+
+## 27. Fragmented – 2
+```
+What is the offset value of the fragments?
+
+Not the calculated value shown in Wireshark
+
+Suggest converting the value from the Hex Dump
+
+A: 122
+
+(Look at the Fragment Offset at the end of the exchange, convert the hex value in the info to decimal)
+```
+
+## 28. ICMPv6 – 1
+```
+What is the ICMPv6 type number of Echo Request?
+
+A: 128
+
+(google)
+```
+
+## 29. ICMPv6 – 2
+```
+What is the ICMPv6 type number of Echo Reply?
+
+A: 129
+
+(google)
+```
+
+## 30. ICMPv6 – 3
+```
+What is the ICMPv6 type number of the Router Advertisement message?
+
+A: 134
+
+(filter "icmpv6.type==134)
+```
+## 31. ICMPv6 – 4
+```
+What is the link-layer address of the advertising router?
+
+A: fa:16:3e:35:21:5a
+
+(In the same packet, look into the ICMPV6 option source link-layer)
+```
+
+## 32. ICMPv6 – 5
+```
+What is the IPv6 prefix being advertised?
+
+A: beef:4:f00d::
+
+(In the same packet, look into the ICMPV6 option prefix info then the Prefix at the bottom)
+```
+
+## 33. HSRP – 1
+```
+What is the HSRP virtual IP?
+
+A: 192.168.0.1
+
+(filter "hsrp" search the cisco Hot standby for Virtual IP)
+```
+
+## 34. HSRP – 2
+```
+What is the HSRP multicast address used?
+
+A: 224.0.0.2
+
+(filter "hsrp" and grab the ip of the MCASt)
+```
+## 35. HSRP – 3
+```
+What is the IP address of the HSRP Active forwarder (before the takeover)?
+
+A: 192.168.0.30
+
+(Filter "hsrp, first packet src ip)
+```
+## 36. HSRP – 4
+```
+What is the IP address of the HSRP Active forwarder (after the takeover)?
+
+A: 192.168.0.10
+
+(Filter "hsrp, last packet src ip)
+
+```
+## 37. VRRP – 1
+```
+What is the VRRP multicast address used?
+
+A: 224.0.0.18
+
+(filter "vrrp" grab the mcast ip)
+```
+## 38. VRRP – 2
+```
+What is the VRRP virtual IP?
+
+A: 192.168.1.254
+
+(filter "vrrp", go into Virtual router and grab the ip)
+```
+## 39. VRRP – 3
+```
+How many total devices are communicating via VRRP?
+
+A: 3
+
+(filter "vrrp" count the total unique IP's)
+```
+
+## 40. RIP – 1
+```
+How many networks are being advertised via RIP?
+
+A: 2
+
+(filter "rip" look in the routing information protocol and count unqiue ips)
+```
+## 41. RIP – 2
+```
+What are the networks being advertised (in numeric order separated by commas and no spaces)?
+(i.e. 1.0.0.0,2.0.0.0 )
+
+A: 200.0.1.0,200.0.2.0
+
+(filter "rip" look in the routing information protocol and search ip)
+```
+## 42. RIP – 3
+```
+What Protocol and port is being used for RIP?
+
+PROTOCOL PORT
+
+A: UDP 520
+
+(same packet, look in IPV4)
+```
+
+## 43. EIGRPv4 – 1
+```
+What network is being advertised via EIGRPv4
+
+A: 192.168.4.0
+
+(filter "eigrp" search the "CISCO EIGRP" for internal route and grab ip)
+```
+
+## 44. EIGRPv4 – 2
+```
+What is the IP protocol number used for EIGRP?
+
+A: 88
+
+(google)
+```
+## 45. EIGRPv4 – 3
+```
+What multicast address is used to send EIGRPv4 updates?
+
+A: 224.0.0.10
+
+(google)
+```
+## 46. EIGRPv6 – 1
+
+```
+What network is being advertised via EIGRPv6
+
+A:2001:db8:0:400::/64
+
+(filter "eigrp" go to a IPV6 and grab the internal route)
+```
+
+## 47. EIGRPv6 – 2
+```
+What multicast address is used to send EIGRPv6 updates?
+
+A: FF02::A
+
+(google)
+```
+## 48. EIGRPv6 – 3
+```
+What Autonomous system number is being used?
+
+A: 100
+
+(filter "eigrp" go to a IPV6 and grab the system number)
+```
+## 49. OSPF – 1
+```
+What is the IP protocol number used for OSPF?
+
+A: 89
+
+(google)
+```
+## 50. OSPF – 2
+```
+What is the IP address of the OSPF designated router (DR)?
+
+A: 192.168.170.8
+
+(filter "ospf" look into OSPF, go to very bottom to DR and look for ip)
+```
+
+## 51. OSPF – 3
+```
+What multicast address is used by the DR to send updates?
+
+A: 224.0.0.5
+
+(filter "ospf" and grab the dst ip)
+```
+
+## 52. BGP – 1
+```
+How many networks are being advertised via BGP?
+
+A: 3
+
+(filter "bgp" go into each packet, look through the BGP.find IPs in NLRI)
+```
+## 53. BGP – 2
+```
+
+What are the networks being advertised (in numeric order separated by commas and no spaces)?
+
+(i.e. 1.0.0.0,2.0.0.0)
+
+A: 10.0.0.0,172.16.0.0,192.168.4.0
+
+(same packet, same IP's just listed in order)
+```
+
+## 54. BGP – 3
+```
+What Autonomous system number is the 192.168.0.10 peer in?
+
+A: 65210
+
+(same packet, look into the path attributes and grab the AS of the IP)
+```
+
+## 55. BGP – 4
+```
+What Protocol and port is being used for BGP?
+
+Transport PROTOCOL PORT
+
+A: TCP 179
+
+(same packet, look through the IPV4 and find Protocol and google port)
 ```
