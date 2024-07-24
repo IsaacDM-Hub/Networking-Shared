@@ -276,7 +276,7 @@ Client
 
 Transparent
 ```
-### VTP Vulnreability 
+### VTP VULNERABILITY 
 ```
 Can cause switches to dump all VLAN information
 
