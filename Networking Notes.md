@@ -207,7 +207,7 @@ Now it can be changed w/ software
 ## Layer 2 Ethernet
 ### VLAN Types 
 ```
-Default - VLAN 1
+Default - VLAN 1 -  If you see a Ethertype is anything other than 08 00, then it is a vlan 
 
 Data - User traffic
 
@@ -216,6 +216,8 @@ Voice - VOIP traffic
 Management - Switch and router management
 
 Native - Untagged switch and router traffic
+
+802.1Q and 802.1AD Vlan Headers 
 ```
 
 ### VLAN Hopping Attack 
@@ -225,4 +227,145 @@ Switch Spoofing (DTP)
 Single Tagging
 
 Double Tagging (using native VLAN)
+```
+
+## ARP
+### ARP Types
+```
+ARP (OP 1 and 2)
+
+RARP (OP 3 and 4) - Reply
+
+Proxy ARP (OP 2)
+
+Gratuitous ARP (OP 2) - Didn't ask for a reply
+```
+### ARP Cache
+```
+All resolved MAC to IP resolutions
+
+If MAC is not in cache then ARP is used
+
+Dynamic entries last from 2-20 minutes
+
+Default gateway is present at minimum
+
+Can be easily duped by attackers
+```
+
+### Man-In-The-Middle With ARP
+```
+Poison ARP Cache with:
+
+Gratuitous ARP
+
+Proxy ARP
+```
+## VLAN TRUNKING PROTOCOL (VTP)
+```
+Dynamically add/remove/modify VLANs
+
+
+Cisco proprietary
+
+Modes:
+
+Server
+
+Client
+
+Transparent
+```
+### VTP Vulnreability 
+```
+Can cause switches to dump all VLAN information
+
+Cause a DoS as switch will not support configured VLANS
+```
+
+## DYNAMIC TRUNKING PROTOCOL (DTP)
+```
+Used to dynamically create trunk links
+
+
+Cisco proprietary
+
+Modes:
+
+Dynamic-Auto
+
+Dynamic-Desirable
+```
+
+### DYNAMIC TRUNKING PROTOCOL (DTP) VULNERABILITY
+```
+On by default
+
+Can send crafted messages to form a VLAN trunk link
+
+Recommend to:
+
+Disable DTP negotiations
+
+Manually assign as Access or Trunk
+```
+
+## CDP(Cisco Discovery Protocol), FDP, AND LLDP
+```
+Cisco Discovery Protocol (CDP)
+
+Foundry Discovery Protocol (FDP)
+
+Link Layer Discovery Protocol (LLDP)
+
+```
+### CDP, FDP, AND LLDP VULNERABILITY
+```
+Leaks valuable information
+
+Clear Text
+
+Enabled by default
+
+Disable it:
+
+Globally
+
+Per interface
+
+May require it for VOIP
+```
+## SPANNING TREE PROTOCOL (STP)
+```
+Root decision process
+
+Elect root Bridge
+
+Identify the Root ports on non-root bridge
+
+Identify the Designated port for each segment
+
+Set alternate ports to blocking state
+
+Convergence Times is the time it takes for a switch to talk to another switch to give directions to root
+```
+
+
+### SPANNING TREE PROTOCOL (STP) TYPES
+```
+802.1D STP
+
+Per VLAN Spanning Tree + (PVST+)
+
+802.1w – Rapid Spanning Tree Protocol (RSTP)
+
+Rapid Per VLAN Spanning Tree + (RPVST+)
+
+802.1s (Multiple Spanning Tree)
+```
+### SPANNING-TREE ATTACK
+```
+Crafted Bridge Protocol Data units (BPDU)
+
+Used to perform a DoS or MitM
 ```
