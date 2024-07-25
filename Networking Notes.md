@@ -1668,6 +1668,10 @@ Vulnerable to crafted packet injection
 Authentication, Authorization, and Accounting
 
 For third party authentication
+
+TACACS (TCP 49) SIMPLE/EXTENDED
+RADIUS (UDP 1645/1646 AND 1812/1813)
+DIAMETER (TCP 3868)
 ```
 ### SNMP (UDP 161/162)
 ```
@@ -1740,10 +1744,4 @@ Directory schema
 Unsecure and secure versions
 ```
 
-### ADDITIONAL PORTS
-```
-TACACS (TCP 49) SIMPLE/EXTENDED
-RADIUS (UDP 1645/1646 AND 1812/1813)
-DIAMETER (TCP 3868)
-RTP (UDP ANY ABOVE 1023)
-```
+### RTP (UDP ANY ABOVE 1023)
