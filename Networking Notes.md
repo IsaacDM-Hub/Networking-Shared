@@ -1101,3 +1101,94 @@ Open standard to Cisco's HSRP, Same Functionality
 ```
 Supports arbitray load balancing in addition to redundancy across gatewats, cisco proprietary
 ```
+
+
+# Day 2
+## Layer 4 Ports
+## 11 IS UDP AND 06 IS TCP AND 01 IS ICMP
+### Transport Layer Protocols
+```
+Connection-oriented
+
+  TCP - Segments
+
+  Unicast traffic
+
+Connection-less
+
+  UDP - Datagrams
+
+  Broadcast, Multicast, or Unicast Traffic
+```
+
+### Port Ranges
+```
+Ranges          Category
+
+0-1023          Well-known(system)
+1024-49151      Registered(user)
+49152-65535     Dynamic(Private)
+```
+### TCP RELIABILITY
+```
+1. Connection establishment
+
+  1. 3-way handshake
+
+2. Data Transfer
+
+  1. Established phase
+
+3. Connection Termination
+
+  1. 4-way Termination
+
+  2. Reset connection
+```
+### TCP HEADERS
+
+```
+1. SRC PORT
+2. DST PORT
+3. SUQEUENCE NUMBER - For the system to see which part of the data it is looking at
+4. ACKNOWLEDGMENT NUMBER - Checks to see if syn/ack match up to verify correct stream
+5. OFFSET - lets you know the size of the TCP Header
+6. RESERVED - Should never be used and at 0
+7. TCP FLAGS - A bit toggled in this field to display syn, syn/ack, ack
+8. WINDOW - Information from the host to tell the other side how much information it can host
+9. CHECKSUM - Checks data
+10. URGENT POINT -  if you have the URG flag set
+11. OPTIONS - Not applicable to this course
+```
+### TCP FLAGS
+```
+URG
+ACK
+PSH
+RST
+SYN
+FIN
+
+TCP Flag Breakout (Binary and Hex)
+
+0X02  SYN
+0X12  SYN, ACK
+0X10  ACK
+
+ACK    SYN
+ 0      1
+ 1      1
+ 1      0
+
+Collection of Exceptionally Unskilled Attackers Pester Real Security Folks
+
+Coach Explained to the University of Alaska to Play Really Snowy Football
+```
+### UDP HEADERS
+```
+
+1. SRC PORT
+2. DST PORT
+3. LENGTH
+4. CHECKSUM
+```
