@@ -617,12 +617,13 @@ NTP (UDP Port 123)
 # TACACS (Port 49)
 > # Used for centralized authentication, authorization, and accounting.
 > # Cisco
+> # commonly used for networking devices
 
 # RADIUS (UDP 1645/1646 AND 1812/1813)
 > # Open source networking protocol used for centralized autentication, authorization and accounting
 
 # DIAMETER (TCP 3868)
-> # exchange authentication, authorization, and accounting (AAA) information in Long-Term Evolution (LTE) and IP Multimedia Systems (IMS) networks.
+> # exchange authentication, authorization, and accounting (AAA) information in Long-Term Evolution (LTE) and IP Multimedia Systems (IMS) networks. (fromm google)
 
 # SNMP (UDP Port 161/162)
 > # Collects and organizes information about managed devices on IP networks
@@ -637,12 +638,12 @@ NTP (UDP Port 123)
 > 		weak community strings, lack of encryption, information disclosure, can be sniffed
 
 # RTP (UDP ANY ABOVE 1023)
-> # Streaming in real-time media over IP networks, designed for transmitting audio and video when speed is of essense
+> # Streaming in real-time media over IP networks, designed for transmitting audio (VOIP) and video when speed is of essense
 
 
 # RDP (Port 3389)
 > # Remote Desktop
-> # developed by miscrosoft
+> # developed by miscrosoft (open standard)
 > 	no server software needed
 > # other proprietary RDP software
 > 	requires to have 3rd party software installed 
