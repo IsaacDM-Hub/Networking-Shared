@@ -618,7 +618,6 @@ NTP (UDP Port 123)
 > # Used for centralized authentication, authorization, and accounting.
 > # Cisco
 
-
 # RADIUS (UDP 1645/1646 AND 1812/1813)
 > # Open source networking protocol used for centralized autentication, authorization and accounting
 
@@ -627,23 +626,38 @@ NTP (UDP Port 123)
 
 # SNMP (UDP Port 161/162)
 > # Collects and organizes information about managed devices on IP networks
+> # versions:
+> 	SNMPV1 - RFC 1157
+> 	SNMPV2C - RFC 1441
+> 	SNMPV3 - RFC 3410
+> # 7 message types
+> 	get request, set request, get next, get bulk, response, trap, inform
+> # vulnerabilities
+>	in V1 and 2C:
+> 		weak community strings, lack of encryption, information disclosure, can be sniffed
 
-
-# RTP
+# RTP (UDP ANY ABOVE 1023)
 > # Streaming in real-time media over IP networks, designed for transmitting audio and video when speed is of essense
 
 
 # RDP (Port 3389)
 > # Remote Desktop
-
+> # developed by miscrosoft
+> 	no server software needed
+> # other proprietary RDP software
+> 	requires to have 3rd party software installed 
 
 # Kerberos (UDP Port 88)
 > # Network authentication protocol that ensures secure authentication for client-server applications.
-
+> # used by active directory
+> # mutual authentication
+> # clients get tickets to access services 
 
 # LDAP (Port 389 and 636)
 > # Accessing and managing distributed directory information services
-
+> # client/server model
+> # directory schema
+> # unsecure and secure versions 
 
 
 
