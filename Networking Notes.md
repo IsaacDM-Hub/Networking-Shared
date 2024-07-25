@@ -1669,9 +1669,6 @@ Authentication, Authorization, and Accounting
 
 For third party authentication
 ```
-### TACACS (TCP 49) SIMPLE/EXTENDED
-### RADIUS (UDP 1645/1646 AND 1812/1813)
-### DIAMETER (TCP 3868)
 ### SNMP (UDP 161/162)
 ```
 Versions:
@@ -1713,7 +1710,6 @@ v1 and 2c
 
   Can be "sniffed"  
 ```
-### RTP (UDP ANY ABOVE 1023)
 ### RDP (TCP 3389)
 ```
 Developed by Microsoft (Open Standard)
@@ -1742,4 +1738,12 @@ Hierarchical
 Directory schema
 
 Unsecure and secure versions
+```
+
+### ADDITIONAL PORTS
+```
+TACACS (TCP 49) SIMPLE/EXTENDED
+RADIUS (UDP 1645/1646 AND 1812/1813)
+DIAMETER (TCP 3868)
+RTP (UDP ANY ABOVE 1023)
 ```
