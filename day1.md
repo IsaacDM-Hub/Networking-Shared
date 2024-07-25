@@ -391,9 +391,9 @@ Dynamic Routing
 first hop redundancy protocol
 	vulnerable to attack via injecting manipulated messages witha MitM attack
 =========================== Layer 4 (Transport) ============================
-## Well-Know Ports: 0-1023
-## Registered : 1024-49151
-## Dynamic: 49152-65535
+## Well-Know Ports: 0-1023 well-known (system)
+## Registered : 1024-49151 registered (user)
+## Dynamic: 49152-65535 dynamic (private)
 
 
 ## TCP Flags:
@@ -418,7 +418,8 @@ VPN
 
 L2TCP
 > # Tunneling Protocol Cisco uses
-
+> # tunnel only, no encryption
+> # RFC 2661
 
 IPSEC
 > # Suite of protocols used to secure IP Communications by providing 3 triad of security at layer 3
@@ -428,6 +429,10 @@ IPSEC
   > # IP gets encapsulated and gets a new ip packet by adding an additional ip header
   > # Creates a secure VPN
 
+Openvpn
+> #open source
+> # uses SSL for encryption
+> # UDP/TCP port 1194
 
 Proxy
 > # Functions as a messenger (An intermediary)
@@ -435,10 +440,13 @@ Proxy
 
 
 
-Socks
+Socks4
 > # TCP ONLY!
 > # Forwards TCP Traffic (Proxychains)
 
+socks5 
+> # supports UDP
+> # supports proxy binding
 
 Netbios (Examine Network Basic Input Output System)
 > # Name Resolution
@@ -448,16 +456,17 @@ Netbios (Examine Network Basic Input Output System)
 SMB
 > # TCP 139/445 and DUP 137/138
 > # Acilitate the sharing of files, printers, serial ports, and various communications among network nodes
-
+> # Datagram is port 138 while session is 139
 
 RPC (Examine Remote Procedure Call)
 > # allows a program to request a service from another program located on the same system or on remote computer
-
+> # hides network complexities
+> # XML,JSON,SOAP,gRPC
 
 API
 > # Framework of rules and protocols for software components to interact
 > # Methods, parameters, and data formats for requests and responses
-
+> # REST and SOAP
 
 ======================= Layer 6 (Presentation) =====================
 Responsibilities
@@ -473,9 +482,10 @@ Telnet
 > Port 23
 > Remote Login
 > Authentication
+> clear text
+> credentials susceptible to interception
 
-
-SSH
+## SSH
 > Port 22
 > Remote Login
 > Encrypted
@@ -486,211 +496,154 @@ SSH
   > # Host Key - Asymmetric Public key created to identify a server to a user
   > # Session Key - Symmetric Key created by the client and the server that protects the communication for a particular session
 > First Connect
-  > # RSA Key is saved to /home/<user>/.ssh/known_hosts file !!! Probably Important !!!
+  > ## RSA Key is saved to /home/<user>/.ssh/known_hosts file !!! Probably Important !!!
 > Reconnect
   > # Wont prompt because the host is saved in the known_hosts file
 > # If SSH gives an error that the rsa key is changed use this command:
   /> ssh-keygen -f "/home/student/.ssh/known_hosts" -R "172.16.82.106"
 > View/change the ssh port, cat the known_hosts file and grep for port to check, and use vi to edit the file and change the port
+> ssh files
+> 	known hosts database: ~./ssh/known_hosts
+> 	config files: /etc/ssh/ssh_config or sshd_config
+# To view the current configured SSH port
+> 	cat /etc/ssh/sshd_config | grep Port
+# Edit file to change the SSH Port
+> 	sudo nano /etc/ssh/sshd_config
+# Restart the SSH Service
+> 	systemctl restart ssh
 
+## SSH-KEYGEN
+> ssh-keygen -t rsa -b 4096 -C "Student"
+> 	creates your own key
+> 	-t is for encryption (rsa|dsa|ecdsa|ed25519), -b is bit length (1024|2048|4096), -C adds a comment 
+> ~/.ssh/id_rsa and ~/.ssh/id_rsa.pub
 
-HTTP(S) (TCP 80/443)
+# SSH-COPY-ID
+> ssh-copy-id student@172.16.82.106
+> 	copies your ssh public key to the remote server
+> 	saves key to ~/.ssh/authorized_keys on remote server
+> 	allows authentication to server with key instead of password
+> 	must secure your private key 
+
+## HTTP(S) (TCP 80/443)
 > User Request Methods
   > # GET / HEAD / POST / PUT
 > User response codes
   > # 100,200,300,400,500
 > Vulnerabilities
   > Flooding
-  > Amplicification
+  > Amplification
   > Low and slow
   > Drive-by Downloads
   > BeEF Framework
 
 
-DNS
+## DNS
 > UDP 53 (Handles Queries/Responses)
 > TCP 53 (Zone Transfer)
   > # When the server shares the domain information
+> responses larger than 512 bytes use TCP
+# DNS records
+> A - IPv4
+> AAAA - IPv6
+> MX - mail server
+> TXT - human-readable
+> NS - name server
+> SOA - start of authority 
 
 
-FTP
+## FTP
 > Port 21
   > # command and control
 > Port 20
-  > # Data
+  > # Data transfer
 > Modes
   > # Active (Initiated on Port 21) <- Default
   > # Passive (Uses both ports)
+> uses clear text
+> suthentication or anonymous 
 
-
-TFTP (Port 69)
+## TFTP (Port 69)
 > # Clear-Text
 > # Reliability provided at the application layer
-
+> # used by routers and switches to transfer IOS and config files
 
 SMTP (Port 25)
 > # Internet standard used for sending electronic mail
-
+> #  no encryption
+> # smtp over TLS/SSL (SMTPs)
+> 	TCP ports 587 and 465
 
 POP (Port 110)
 > # Used to retrieve electronic mail from a server
-
+> # no sync with server and no encryption
+> # POP3
 
 IMAP (Port 143)
 > # Download electronic mail from a server
-
+> # sync with server
+> # no encryption
+> # IMAP4
 
 DHCP (UDP Port 67/68)
 > # Assigns IP Address parameters across an enterprise
+> # DORA
+> 	Discover (broadcast)
+> 	Offer (unicast)
+> 	Request (broadcast)
+> 	Acknowledge (unicast)
+> # vulnerabilities
+>	rogue DHCP
+>	evil twin
+>	DHCP starvation
 
+DHCPV6
+> # if flag is set during SLAAC:
+> 	Solicit (multicast)
+> 	Advertise (unicast
+> 	Request or information request (multicast)
+> 	Reply (unicast)
 
 NTP (UDP Port 123)
 > # Allows for clock sync between computers over packet-switched data networks
+> # vulnerable to crafted packet injection
+> # stratum 0 - authoritative time source
+> # up to stratum 15
 
+## AAA protocols
+> authentication,authorization and accounting
+> for third party authentication
 
-TACACS (Port 49)
+# TACACS (Port 49)
 > # Used for centralized authentication, authorization, and accounting.
 > # Cisco
 
 
-RADIUS (UDP 1645/1646 AND 1812/1813)
+# RADIUS (UDP 1645/1646 AND 1812/1813)
 > # Open source networking protocol used for centralized autentication, authorization and accounting
 
+# DIAMETER (TCP 3868)
+> # exchange authentication, authorization, and accounting (AAA) information in Long-Term Evolution (LTE) and IP Multimedia Systems (IMS) networks.
 
-SNMP (UDP Port 161/162)
+# SNMP (UDP Port 161/162)
 > # Collects and organizes information about managed devices on IP networks
 
 
-RTP
+# RTP
 > # Streaming in real-time media over IP networks, designed for transmitting audio and video when speed is of essense
 
 
-RDP (Port 3389)
+# RDP (Port 3389)
 > # Remote Desktop
 
 
-Kerberos (UDP Port 88)
+# Kerberos (UDP Port 88)
 > # Network authentication protocol that ensures secure authentication for client-server applications.
 
 
-LDAP (Port 389 and 636)
+# LDAP (Port 389 and 636)
 > # Accessing and managing distributed directory information services
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
