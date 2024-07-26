@@ -167,3 +167,104 @@ BPF [EXAMPLES]
  > # this filters for traceroute being used
 /> ether[12:4]&0xffff0fff=0x81000001&&ether[16:4]&0xffff0fff=0x8100000a
  > # this filters for vlan hopping from vlan 1 to vlan 10 (looks through the vlan tags) [double-tagging]
+
+## BPFs at the data link layer
+> # Search for the destination broadcast MAC address.
+>  'ether[0:4] = 0xffffffff && ether[4:2] = 0xffff'
+>  'ether[0:2] = 0xffff && ether[2:2]= 0xffff && ether[4:2] = 0xffff'
+> # Search for the source MAC address of fa:16:3e:f0:ca:fc.
+>  'ether[6:4] = 0xfa163ef0 && ether[10:2] = 0xcafc'
+>  'ether[6:2] = 0xfa16 && ether[8:2] = 0x3ef0 && ether[10:2] = 0xcafc'
+
+> # Search for unicast (0x00) or multicast (0x01) MAC address.
+>   'ether[0] & 0x01 = 0x00'
+>   'ether[0] & 0x01 = 0x01'
+>   'ether[6] & 0x01 = 0x00'
+>   'ether[6] & 0x01 = 0x01'
+
+> # Search for IPv4, ARP, VLAN Tag, and IPv6 respectively.
+>  ether[12:2] = 0x0800
+>  ether[12:2] = 0x0806
+>  ether[12:2] = 0x8100
+>  ether[12:2] = 0x86dd
+
+> # Search for 802.1Q VLAN 100.
+>  'ether[12:2] = 0x8100 && ether[14:2] & 0x0fff = 0x0064'
+>  'ether[12:4] & 0xffff0fff = 0x81000064'
+
+># Search for double VLAN Tag.
+>  'ether[12:2] = 0x8100 && ether[16:2] = 0x8100'
+
+## BPFs at the network layer
+> # Search for IHL greater than 5.
+>  'ip[0] & 0x0f > 0x05'
+>  'ip[0] & 15 > 5'
+
+> # Search for ipv4 source or destination address of 10.1.1.1.
+>  'ip[12:4] = 0x0a010101'
+>  'ip[16:4] = 0x0a010101'
+
+> # Search for ipv6 source or destination address starting with FE80.
+>  'ip6[8:2] = 0xfe80'
+>  'ip6[24:2] = 0xfe80'
+
+> # Search for TCP Flags set to ACK+SYN. No other flags can be set.
+>  'tcp[13] = 0x12'
+
+> # Search for TCP Flags set to ACK+SYN. The other flags are ignored.
+>  'tcp[13] & 0x12 = 0x12'
+
+## DESCRIBE PASSIVE OS FINGERPRINTING (P0F)
+Similar to tcpdump except it only captures traffic that matches signatures in its database file.
+
+> # P0F database
+> less /etc/p0f/p0f.fp
+
+> # help
+>  p0f -h
+
+# run on interface
+ p0f -i eth0
+
+# RUN P0F ON A PCAP
+p0f -r capture.pcap
+
+# OUTPUT TO GREPPABLE LOG FILE
+p0f -r wget.pcap -o /var/log/p0f.log
+cat /var/log/p0f.log | grep {expression}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
