@@ -45,10 +45,10 @@ Interface Naming
 
 
 TCPDUMP Primitives
-> User Friendly cpature expressions
+> User Friendly cpature expressions aka human readable
   > # src or dst
   > # host, net, port, portrange
-
+  > # tcp or udp
 
 TCPDUMP Options !!!!!!!!!!
 > -A
@@ -58,7 +58,7 @@ TCPDUMP Options !!!!!!!!!!
 > -i
   > # Select a different interface
 > -e
-  > # Prints data-link headers
+  > # Prints data-link headers (MAC adresses)
 > -r 
   > # Reads from pcap
 > -w
@@ -67,7 +67,7 @@ TCPDUMP Options !!!!!!!!!!
   > # Displays packet data in hex
 > -XX
   > # Displays everything in hex (Including Layer 2)
-> -vv
+> -vv/v/vvv
   > # Gives verbose output with detail on the TTL, IPID, ect.
 > -n
   > # Does not convert protocol and addresses to names
@@ -91,7 +91,7 @@ Compare Primitives and BPFS
   > # Can be more complex to create expressions but offer far more precision
   > # Faster because you can set it to look at specific things and doesnt show you bloated information (Saves Computational Power)
 
-
+## construct BPF
 Kernel API
 > TCPDUMP requests a RAW Socket creation
 > Filters are set using the SO_ATTACH_FILTER
@@ -122,6 +122,7 @@ TCPDump filtering with BPF’s and bit-masking [SYNTAX] !!!!!!!!!!
 BitWise Masking
 > Can Read 1 (BYTE), 2 (HALF-WORD), or 4 (WORD)
 > Will only filter the byte level (alone)
+> binary 0 to ignore bit or 1 to match bit
 [EXAMPLES]
   /> tcpdump 'ether[12:4] & 0xffff0fff = 0x810000abc'
     > # looking at the vlan header (8100 header)
