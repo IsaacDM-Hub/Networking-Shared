@@ -498,3 +498,231 @@ A: TCP 179
 
 
 # DAY 2 
+
+## 1. SMB – 1
+```
+
+What Protocol and port is being used for SMB?
+
+PROTOCOL PORT
+
+A: TCP 445
+
+(GOOGLE)
+```
+
+## 2. SMB – 2
+```
+What is the name of the file accessed via SMB?
+
+A: putty.exe
+
+(filter "smb" and follow TCP stream, look in the traffic)
+```
+
+## 3. DHCP – 1
+```
+What is the IP address of the DHCP server?
+
+A: 192.168.0.1
+
+(filter "dhcp" use the SRC IP in the DHCP ACK)
+```
+
+## 4. DHCP – 2
+```
+What is the “offered” IP address?
+
+A: 192.168.0.10
+
+(same filter as last, look in the DST IP in the DHCP OFFER)
+```
+
+# Day 3
+## CAPTURE LIBRARIES
+```
+Libpcap - https://www.tcpdump.org/
+
+WinPcap - https://www.winpcap.org/
+
+NPcap - https://nmap.org/npcap/
+```
+## SNIFFING TOOLS AND METHODS
+```
+Practical Uses:
+
+  Network troubleshooting
+
+  Diagnosing improper routing or switching
+
+  Identifying port/protocol misconfigurations
+
+  Monitor networking consumption
+
+  Intercepting usernames and passwords
+
+  Eavesdrop on network communications
+
+
+Disadvantages:
+
+  Requires elevate permissions
+
+  Can only capture what NIC can see
+
+  Cannot capture local traffic
+
+  Can consume massive amounts of system resources
+
+  Lost packets on busy networks
+
+
+
+########### PACKETS CAN BE CAPTURED IN TWO WAYS:
+  Hardware Packet Sniffers
+
+  Software Packet Sniffers
+```
+
+
+ ## SOCKET TYPES
+```
+User Space Sockets
+
+  Stream socket - TCP
+
+  Datagram socket - UDP
+
+Kernel Space Sockets
+
+  RAW Sockets
+
+
+CAPTURE LIBRARY
+Requires root for:
+  Promicious Mode (Listen on all NICs)
+
+  All captured packets are created as RAW Sockets
+
+```
+
+
+## TYPES OF SNIFFING 
+```
+Active
+
+Passive
+```
+
+
+## INTERFACE NAMING
+```
+Traditional:
+  eth0, eth1
+
+Consistent:
+  eno1, ens3
+```
+
+
+## TCPDUMP PRIMITIVES
+```
+User friendly capture expressions
+  src or dst
+
+  host or net
+
+  tcp or udp
+
+
+TCPDUMP PRIMITIVE QUALIFIERS
+type - the 'kind of thing' that the id name or number refers to
+  host, net, port, or portrange
+
+dir - transfer direction to and/or from
+  src or dst
+
+proto - restricts the match to a particular protocol(s)
+  ether, arp, ip, ip6, icmp, tcp, or udp
+```
+
+### TCPDUMP PRIMITIVE EXAMPLES
+```
+Simple
+
+Extended
+```
+
+## BASIC TCPDUMP OPTIONS
+```
+-A = print payload in ASCII
+
+-D = list interfaces
+
+-d = Dump the compiled packet-matching code in a human readable form (verify)
+tcpdump "ether[12:2] = 0x800" -d
+
+-i = specify capture interface
+
+-e = print data-link headers
+
+-X or XX = print payload in HEX and ASCII
+
+-w = write to pcap
+
+-r = read from pcap
+
+-v, vv, or vvv = verbosity
+
+-n = no inverse lookups
+```
+
+## LOGICAL OPERATORS
+```
+Primitives may be combined using:
+
+Concatenation: 'and' ( && )
+
+Alteration: 'or' ( || )
+
+Negation: 'not' ( ! )
+
+< or < =
+
+> or >=
+
+= or !=
+```
+
+## COMPARE PRIMITIVES AND BPFS
+```
+Primitives (macros)
+
+  CMU/Stanford Packet Filter (CSPF) Model commonly called Boolean Expression Tree
+
+  Simple and easy filter expressions
+
+  First user-level packet filter model
+
+  Memory-stack-based filter machine which can create bottlenecks on model CPUs
+
+  can have redundant computations of the same information
+
+
+
+Berkley Packet Filters (BPF)
+
+  Control Flow Graph (CFG) Model
+
+  Uses a simple (non-shared) buffer model which can make it 1.5 to 20 times faster than CSPF
+
+  Can be more complex to create expressions but offer far more precision
+```
+## BERKLEY PACKET FILTER (BPF)
+```
+Similar in function to primitives
+
+Reduces redudant computations
+
+More complex expressions
+```
