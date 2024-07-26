@@ -726,3 +726,316 @@ Reduces redudant computations
 
 More complex expressions
 ```
+
+
+## CONSTRUCT A BPF
+
+
+### KERNEL API
+```
+TCPDUMP requests a RAW Socket creation
+
+Filters are set using the SO_ATTACH_FILTER
+
+SO_ATTACH_FILTER allows us to attach a Berkley Packet Filter to the socket to capture incoming packets.
+```
+
+### BERKLEY PACKET FILTERS
+```
+tcpdump {A} [B:C] {D} {E} {F} {G}
+
+A = Protocol (ether | arp | ip | ip6 | icmp | tcp | udp)
+B = Header Byte offset
+C = optional: Byte Length. Can be 1, 2 or 4 (default 1)
+D = optional: Bitwise mask ( & )
+E = Operator ( = | == | > | < | <= | >= | != | () | << | >> )
+F = Result of Expression
+G = optional: Logical Operator ( && || ) to bridge expressions
+```
+
+#### BPF EXAMPLES
+```
+tcpdump -i eth0 'ether[12:2] = 0x0806'
+tcpdump -i eth1 'ip[9] = 0x06'
+tcpdump -i eth0 'tcp[0:2] = 53 || tcp[2:2] = 53'
+tcpdump 'ether[12:2] = 0x0800 && (tcp[2:2] != 22 && tcp[2:2] != 23)'
+```
+### BITWISE MASKING
+```
+BPFs can read 1 (byte), 2 (half-word) or 4 (word)
+
+BPFs alone will only filter to the byte level
+
+Bit-wise masking allow filtering precision to the bit level
+
+Binary (0) to ignore bit
+
+Binary (1) to match bit
+```
+#### BITWISE MASKING EXAMPLES
+```
+tcpdump 'ether[12:4] & 0xffff0fff = 0x81000abc'
+tcpdump 'ip[1] & 252 = 32'
+tcpdump 'ip[6] & 224 != 0'
+tcpdump 'tcp[13] & 0x11 = 0x11'
+tcpdump 'tcp[12] & 0xf0 > 0x50'
+```
+### FILTER LOGIC 
+```
+MOST EXCLUSIVE:
+tcp[13] = 0x11
+--assumes this--
+tcp[13] & 0xFF = 0x11
+#####################
+LESS EXCLUSIVE:
+tcp[13] & 0x11 = 0x11
+#####################
+LEAST EXCLUSIVE 
+tcp[13] & 0x11 > 0
+tcp[13] & 0x11 !=0
+#####################
+```
+
+## BPFS AT THE DATA LINK LAYER
+```
+Search for the destination broadcast MAC address.
+'ether[0:4] = 0xffffffff && ether[4:2] = 0xffff'
+'ether[0:2] = 0xffff && ether[2:2]= 0xffff && ether[4:2] = 0xffff'
+
+Search for the source MAC address of fa:16:3e:f0:ca:fc.
+'ether[6:4] = 0xfa163ef0 && ether[10:2] = 0xcafc'
+'ether[6:2] = 0xfa16 && ether[8:2] = 0x3ef0 && ether[10:2] = 0xcafc'
+
+
+Search for unicast (0x00) or multicast (0x01) MAC address.
+'ether[0] & 0x01 = 0x00'
+'ether[0] & 0x01 = 0x01'
+'ether[6] & 0x01 = 0x00'
+'ether[6] & 0x01 = 0x01'
+
+
+Search for IPv4, ARP, VLAN Tag, and IPv6 respectively.
+ether[12:2] = 0x0800
+ether[12:2] = 0x0806
+ether[12:2] = 0x8100
+ether[12:2] = 0x86dd
+
+
+Search for 802.1Q VLAN 100.
+'ether[12:2] = 0x8100 && ether[14:2] & 0x0fff = 0x0064'
+'ether[12:4] & 0xffff0fff = 0x81000064'
+
+Search for double VLAN Tag.
+'ether[12:2] = 0x8100 && ether[16:2] = 0x8100'
+```
+
+## BPFS AT THE NETWORK LAYER
+```
+Search for IHL greater than 5.
+'ip[0] & 0x0f > 0x05'
+'ip[0] & 15 > 5'
+
+
+Search for ipv4 DSCP value of 16.
+'ip[1] & 0xfc = 0x40'
+'ip[1] & 252 = 64'
+'ip[1] >> 2 = 16'
+
+Search for traffic class in ipv6 having a value.
+'ip6[0:2] & 0x0ff0 != 0'
+
+
+Search for ONLY the RES flag set. DF and MF must be off.
+'ip[6] & 0xE0 = 0x80'
+'ip[6] & 224 = 128'
+
+Search for RES bit set. The other 2 flags are ignored so they can be on or off.
+'ip[6] & 0x80 = 0x80'
+'ip[6] & 128 = 128
+
+
+Search for ONLY the DF flag set. RES and MF must be off.
+'ip[6] & 0xE0 = 0x40'
+'ip[6] & 224 = 64'
+
+Search for DF bit set. The other 2 flags are ignored so they can be on or off.
+'ip[6] & 0x40 = 0x40'
+'ip[6] & 64 = 64'
+
+
+Search for ONLY the MF flag set. RES and DF must be off.
+'ip[6] & 0xe0 = 0x20'
+'ip[6] & 224 = 32'
+
+Search for MF bit set. The other 2 flags are ignored so they can be on or off.
+'ip[6] & 0x20 = 0x20'
+'ip[6] & 32 = 32'
+
+
+Search for offset field having any value greater than zero (0).
+'ip[6:2] & 0x1fff > 0'
+'ip[6:2] & 8191 > 0'
+
+Search for MF set or offset field having any value greater than zero (0).
+'ip[6] & 0x20 = 0x20 || ip[6:2] & 0x1fff > 0'
+'ip[6] & 32 = 32 || ip[6:2] & 8191 > 0'
+
+
+Search for TTL in ipv4(6) packet.
+'ip[8] = 128'
+'ip[8] < 128'
+'ip[8] >= 128'
+'ip6[7] = 128'
+'ip6[7] < 128'
+'ip6[7] >= 128'
+
+
+
+Search for ICMPv4(6), TCP, or UDP encapsulated within an ipv4(6) packet.
+'ip[9] = 0x01'
+'ip[9] = 0x06'
+'ip[9] = 0x11'
+'ip6[6] = 0x3A'
+'ip6[6] = 0x06'
+'ip6[6] = 0x11'
+
+
+
+Search for ipv4 source or destination address of 10.1.1.1.
+'ip[12:4] = 0x0a010101'
+'ip[16:4] = 0x0a010101'
+
+Search for ipv6 source or destination address starting with FE80.
+'ip6[8:2] = 0xfe80'
+'ip6[24:2] = 0xfe80'
+```
+
+
+## BPFS AT THE TRANSPORT LAYER
+```
+Search for TCP source port 3389.
+'tcp[0:2] = 3389'
+
+Search for TCP destination port 3389.
+'tcp[2:2] = 3389'
+
+Search for TCP source or destination port 3389.
+'tcp[0:2] = 0x0d3d || tcp[2:2] = 0x0d3d'
+
+
+Search for TCP with options.
+'tcp[12] & 0xF0 > 0x50'
+'tcp[12] & 240 > 80'
+
+Search for TCP Reserve field with a value.
+'tcp[12] & 0x0F != 0'
+'tcp[12] & 15 > 0'
+
+
+Search for TCP Flags set to ACK+SYN. No other flags can be set.
+'tcp[13] = 0x12'
+
+Search for TCP Flags set to ACK+SYN. The other flags are ignored.
+'tcp[13] & 0x12 = 0x12'
+
+
+Search for TCP Flags ACK and SYN (both or 1 must be on).
+'tcp[13] & 0x12 != 0'
+'tcp[13] & 0x12 > 0'
+
+
+
+Search for TCP Urgent Pointer having a value.
+'tcp[18:2] != 0'
+'tcp[18:2] > 0'
+
+```
+
+
+## WIRESHARKS USE OF BPFS
+```
+Capture filters - used to specify which packets should be saved to disk while capturing.
+
+Display filters - allow you to change the view of what packets are displayed of those that are captured.
+
+Can use most primitives and/or BPFs
+
+```
+### WIRESHARK DISPLAY FILTERS 
+```
+Protocol Headers
+
+Addresses/Ports
+
+Header Fields
+
+Follow Streams
+
+Apply as Filter
+```
+
+### POPULAR WIRESHARK MENUS 
+```
+Colorize Traffic - Menu → View → Coloring Rules…​
+
+Protocol Hierarchy - Menu→ Statistics → Protocol Hierarchy
+
+Firewall Rules - Menu → Tools → Firewall ACL Rules
+
+Exporting Objects - Menu → File → Export Objects
+
+Decrypt Traffic - Menu → Edit → Preference → Protocols → SSL
+
+Conversations - Menu → Statistics → Conversations
+
+Endpoints - Menu → Statistics → Endpoints
+
+I/O Graph - Menu → Statistics → I/O Graph
+
+ipv4 and ipv6 statistics - Menu → Statistics → ipv4 Statistics ################ Menu → Statistics → ipv6 Statistics
+
+Expert Information - Menu → Analyze → Expert Information
+
+Geo Location - Menu → Edit → preferences → name resolution → GeoIP database directories "Edit"
+```
+
+
+
+## PASSIVE OS FINGERPRINTING (P0F)
+```
+Similar to tcpdump except it only captures traffic that matches signatures in its database file.
+
+
+P0F SIGNATURE DATABASE
+less /etc/p0f/p0f.fp
+
+
+P0F HELP
+p0f -h
+
+
+RUN P0F ON INTERFACE
+p0f -i eth0
+
+
+RUN P0F ON A PCAP
+p0f -r capture.pcap
+
+
+OUTPUT TO GREPPABLE LOG FILE
+p0f -r wget.pcap -o /var/log/p0f.log
+cat /var/log/p0f.log | grep {expression}
+```
+
+### OPERATING SYSTEMS
+```
+Searches for specific signatures in:
+
+Most Operating Systems
+
+Most Browsers
+
+Search Robots
+
+Command Line Tools
+```
