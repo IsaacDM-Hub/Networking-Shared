@@ -27,7 +27,7 @@ Python
 > Family
   > # AF_INET*
   > # AF_INET6
-  > # AF_UNIX
+  > # AF_UNIX (out of scope)
     > # What daemons use to speak to hardware
 > Type
   > # SOCK_STREAM* (TCP)
