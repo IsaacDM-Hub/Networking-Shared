@@ -2248,3 +2248,216 @@ Search Robots
 Command Line Tools
 ```
 
+## DAY 4
+
+### SOCKET TYPES
+```
+Stream Sockets(TCP) - Connection oriented and sequenced; methods for connection establishment and tear-down. Used with TCP, SCTP, and Bluetooth.
+
+Datagram Sockets(UDP) - Connectionless; designed for quickly sending and receiving data. Used with UDP.
+
+RAW Sockets(ACTIVLY CREATING SOCKET HEADER) - Direct sending and receiving of IP packets without automatic protocol-specific formatting.
+```
+
+### User Space vs. Kernel Space Sockets
+```
+User Space Sockets (AUTOMATIC TCP OR UDP)
+  Stream Sockets
+  Datagram Sockets
+
+Kernel Space Sockets (MANUAL)
+  RAW Sockets
+```
+
+### Socket Creation and Privilege Level
+```
+User Space Sockets - The most common sockets that do not require elevated privileges to perform actions
+on behalf of user applications.
+
+Kernel Space Sockets - Attempts to access hardware directly on behalf of a user application to either prevent
+encapsulation/decapsulation or to create packets from scratch, which requires elevated privileges.
+````
+
+
+### Understanding Python Terminology
+```
+Libraries (Standard Python Library)
+  Modules (_import module)
+    Functions (module.function)
+    Exceptions (try:)
+    Constants (AF_INET)
+    Objects ()
+    List [] vs Tuple ()
+```
+
+#### String vs Integer
+```
+String
+  my_string = "Hello World"
+
+Number
+  int = 1234
+  float = 3.14
+  hex = 0x45
+```
+
+#### Built-In Functions
+```
+int()
+
+len()
+
+str()
+
+sum()
+
+print()
+```
+
+##### Built-In Methods
+```
+my_string.upper()
+
+my_string.lower()
+
+my_string.split()
+
+my_list.append()
+
+my_list.insert()
+```
+#### How Imports Work
+```
+import {module}
+
+import {module} as {name}
+
+from {module} import *
+
+from {module} import {function}
+
+from {module} import {function} as {name}
+
+
+
+```
+
+
+### Network Programming with Python3
+```
+Network sockets primarily use the Python3 Socket library and socket.socket function.
+
+import socket
+  s = socket.socket(socket.FAMILY, socket.TYPE, socket.PROTOCOL) 
+```
+#### The socket.socket Function
+```
+Inside the socket.socket. function, you have these arguments, in order:
+
+socket.socket( *family*, *type*, *proto* )
+family: AF_INET*, AF_INET6, AF_UNIX
+
+type: SOCK_STREAM*, SOCK_DGRAM, SOCK_RAW
+
+proto: 0*, IPPROTO_TCP, IPPROTO_UDP, IPPROTO_IP, IPPROTO_ICMP, IPPROTO_RAW
+```
+#### Python3 Libraries and References
+```
+Socket
+
+Errors
+
+Struct
+
+Exceptions
+
+Sys
+```
+### Raw IPV4 Sockets
+```
+RAW Socket scripts must include the IP header and the next headers.
+
+Requires guidance from the "Request for Comments" (RFC) to follow header structure properly.
+  RFCs contain technical and organizational documents about the Internet, including specifications and policy documents.
+
+See RFC 791, Section 3 - Specification for details on how to construct an IPv4 header.
+```
+
+#### Raw Socket Use Case
+```
+Testing specific defense mechanisms - such as triggering and IDS for an effect, or filtering
+
+Avoiding defense mechanisms
+
+Obfuscating data during transfer
+
+Manually crafting a packet with the chosen data in header fields
+```
+### Encoding and Decoding
+```
+Encoding
+  The process of taking bits and converting them using a specified cipher.
+
+Decoding
+  Reverse of the conversion process used by the specified cipher for encoding.
+
+Common encoding schemes
+  UTF-8, Base64, Hex
+```
+
+#### Hex Encoding and Decoding
+```
+Encode text to Hex:
+  echo "Message" | xxd
+
+Encode file to Hex:
+  xxd file.txt file-encoded.txt
+
+Decode file from Hex:
+  xxd -r file-encoded.txt file-decoded.txt
+```
+#### Python Hex Encoding
+```
+import binascii
+message = b'Message'
+hidden_msg = binascii.hexlify(message)
+```
+
+
+#### Base64 Encoding and Decoding
+```
+Encode text to base64:
+  echo "Message" | base64
+
+Endode file to Base64:
+  base64 file.txt > file-encoded.txt
+
+Decode file from Base64:
+  base64 -d file-encoded.txt > file-decoded.txt
+```
+
+#### Python Base64 Encoding
+```
+import base64
+message = b'Message'
+hidden_msg = base64.b64encode(message)
+```
+### Encoding vs Encryption
+```
+Encoding - converts data into a different format
+
+Encryption - scrambles data to make it unreadable without a secret key
+```
+
+
+### RUNNING SOCKET SCRIPTS
+```
+nc -lvp 1111 for tcp
+nc -luvp 2222 for udp
+```
+
+
+
+
+
+
