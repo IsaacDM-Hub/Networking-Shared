@@ -89,7 +89,7 @@ Socket Functions
 
 
 [SOCKET SCRIPTS Stream, Dgram, Ipraw, Tcpraw]
-Stream (What to change)
+## Stream (What to change)
   > # Message (Optional)
 Dgram
   > # Message (Optional)
@@ -131,10 +131,20 @@ Encoding
   /> xxd file.txt file-encoded.txt
 > Decode file from Hex
   /> xxd -r file-encoded.txt file-decoded.txt
+>   # -r reverses or "solves" encryption
 > Python Hex Ecoding
   # import binascii
   # message = b'Message'
   # hidden_msg = binascii.hexlify(message)
+
+> Encode text to base64:
+> # echo "Message" | base64
+
+> Endode file to Base64:
+> # base64 file.txt > file-encoded.txt
+
+> Decode file from Base64:
+> # base64 -d file-encoded.txt > file-decoded.txt
 
 ====================================== METHODOLOGIES ============================================
 
