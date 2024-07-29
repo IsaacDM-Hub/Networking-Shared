@@ -152,7 +152,7 @@ search screenshot in draw.io to help keep images on the maps
 > youll get an ip 
 
 
-====================================== METHODOLOGIES ============================================
+====================================== RECON METHODOLOGIES AND MAPPING  ============================================
 
 
 Net Recon Methodology
@@ -207,7 +207,8 @@ Passive Recon Methodology
   /> get
   /> curl
   /> ping
+==================================================================fin=============================
 ip route/show ip route for routing table [not really useful but can give SOMETHING]
-> sudo which ping tcpdump wireshark
+> sudo which ping tcpdump wireshark curl 
 > wget -r <ip> helps with tunnels
-> firefoc ip/index.html pulls up a firefox window on the ip ONLY IF HTML 
+> firefox ip/index.html pulls up a firefox window on the ip ONLY IF HTML 
