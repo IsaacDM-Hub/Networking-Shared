@@ -146,17 +146,25 @@ Encoding
 > Decode file from Base64:
 > # base64 -d file-encoded.txt > file-decoded.txt
 
+## mapping
+search screenshot in draw.io to help keep images on the maps 
+> youll be given an inital start point, and all creds
+> youll get an ip 
+
+
 ====================================== METHODOLOGIES ============================================
+
 
 Net Recon Methodology
 > Host Discovery
-  > # Ruby ping sweep (if ping sweep available)
+  > # Ruby ping sweep (if ping sweep available) 
+    >  # for i in {1..254} ;do (ping -c 1 192.168.1.$i | grep "bytes from" &) ;done
   > # NMAP scan if no ping
 > Port Discovery
   > # NMAP
   > # nc scan script
 > Port Validation
-  > # Banner grabbing using nc
+  > # Banner grabbing using nc ip port
 > Follow-on actions based on ports found
   > # if 21 FTP [IP ADDR] connects to ftp server
     /> passive
@@ -174,7 +182,8 @@ Scan Methodology
   > # Well know port range 1-1023
   > # which tcpdump wireshark nmap telnet get curl ping
   > # Chunks of 2000 or first 10000 ports (65535)
-
+## if you see welcome to vyos  the account will be vyos instead of student but the password is still password
+ 
 Passive Recon Methodology
 /> hostname
   > # permissions:
@@ -198,3 +207,7 @@ Passive Recon Methodology
   /> get
   /> curl
   /> ping
+ip route/show ip route for routing table [not really useful but can give SOMETHING]
+> sudo which ping tcpdump wireshark
+> wget -r <ip> helps with tunnels
+> firefoc ip/index.html pulls up a firefox window on the ip ONLY IF HTML 
