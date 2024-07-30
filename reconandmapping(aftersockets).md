@@ -1,6 +1,21 @@
 net1_student17:password17
 vyos:password
 
+T1
+Hostname: networking-ctfd-1.server.vta
+Record Type: TXT
+IP: UNKNOWN
+Ports: 53
+Action: interrogate DNS records
+
+Red Boundry Router
+Hostname:
+IP: 172.16.120.1
+Ports: 22
+Username: vyos
+Password: password
+Action: Use as start point and Perform Passive/Active Reconnaissance
+
 
 Recon Stages
 # View (Passive_Active_Disovery.png) for the details on the following:
