@@ -1,3 +1,7 @@
+net1_student17:password17
+vyos:password
+
+
 Recon Stages
 # View (Passive_Active_Disovery.png) for the details on the following:
 > Passive External
