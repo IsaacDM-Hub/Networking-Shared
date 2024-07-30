@@ -2862,7 +2862,7 @@ n = No determination of protocol names. Shows 22 not SSH.
 t = Display only TCP connections.
 u = Display only UDP connections.
 p = Shows which processes are using which sockets
-
+(RECOMMENDED IS ss -ntlp) 
 
 -Services File-
 
