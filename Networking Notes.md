@@ -3055,6 +3055,11 @@ Software/Components with Known Vulnerabilities
 ## Netcat command
 ```
 nc 172.16.20.1 22 (ip then port)
+
+
+
+
+--max-retries 1
 ```
 
 
