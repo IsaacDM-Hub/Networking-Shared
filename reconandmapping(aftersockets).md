@@ -102,6 +102,7 @@ Recon Stages
     > Show Network connections
       /> netstat (windows)
       /> ss [netstat] (linux)
+        -ntup forboth 
     > Services file
       /> %SystemRoot%\system32\drivers\etc\services (windows)
       /> /etc/services (linux)
@@ -119,7 +120,7 @@ Recon Stages
       /> ip route [netstat -r] (linux)
       /> show ip route (vyos)
     > File search
-      /> find / -name hint* 2> /dev/null
+      /> find / -iname hint* 2> /dev/null
       /> find / -iname flag* 2> /dev/null
       /> locate flag*
 
@@ -130,8 +131,8 @@ Recon Stages
     /> arp-scan --interface=eth0 --localnet
     /> nmap -sP -PR 172.16.82.96/27
   > Ping Scanning
-    /> for i in {1..254}; do (ping -c 1 172.16.82.$i | grep "bytes from" &) ; done
-
+    /> for i in {1..254}; do (ping -c 1 172.16.82.$i | grep "bytes from" &) ; done (change first 3 octets)
+      sudo nmap -sP 172.16.82.96/27 works as well but most boxes dont have nmap
 
 Mapping
 > Device Type (Router/Host)
@@ -171,3 +172,19 @@ for ((i=$start; $i<=$end; i++))
 do
     nc -nuvzw1 $net.$i $ports 2>&1 | grep -E 'succ|open'
 done
+
+## Netcat - Banner Grabbing
+> Find what is running on a particular port
+  nc [Target IP] [Target Port]
+  nc 172.16.82.106 22
+  nc -u 172.16.82.106 53
+    -u : To switch to UDP
+
+## Curl and Wget
+# Both can be used to interact with the HTTP, HTTPS and FTP protocols.
+Curl - Displays ASCII
+  curl http://172.16.82.106
+  curl ftp://172.16.82.106
+Wget - Downloads (-r recursive)
+  wget -r http://172.16.82.106
+  wget -r ftp://172.16.82.106
