@@ -16,6 +16,14 @@ Username: vyos
 Password: password
 Action: Use as start point and Perform Passive/Active Reconnaissance
 
+Entry Float IP: 10.50.21.8
+
+Your Network Number is 1
+
+Credentials: net1_studentX:passwordX
+
+Replace X with your student number
+
 
 Recon Stages
 # View (Passive_Active_Disovery.png) for the details on the following:
