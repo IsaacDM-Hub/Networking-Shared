@@ -2456,8 +2456,605 @@ nc -lvp 1111 for tcp
 nc -luvp 2222 for udp
 ```
 
+## DAY 5
+### Reconnaissance Stages
+```
+Passive External
+
+Active External
+
+Passive Internal
+
+Active Internal
+```
+
+#### Passive Recon Activities
+```
+IP Addresses and Sub-domains
+
+Identifying External/3rd Party sites
+
+Identifying People
+
+Identifying Technologies
+
+Identifying Content of Interest
+
+Identifying Vulnerabilities
+###############
+Useful Sites
+  OSINT Framework
+  Pentest-Standard
+  SecuritySift
+###############
+
+IP Addresses and Sub-domains
+  DNS Lookups
+  BGP advertised prefixes
+  IANA listed address blocks
+###############
+
+Identifying External/3rd Party sites
+  Parent/Subordinate organizations
+  Clients/Customers
+  Service organizations
+  Partners
+###############
+
+Identifying People
+  Target website
+  Crawler tools like Maltego or Creepy
+  Search engines
+  Social Media
+  Job Portals
+  Tracking active emails
+###############
+Identifying Technologies
+  File extensions
+  Server responses
+  Job listing
+  Website content
+  Google Hacking
+  Shodan.io
+###############
+Identifying Content of Interest
+  /etc/passwd and /etc/shadow or SAM database
+  Configuration files
+  Log files
+  Backup files
+  Test pages
+  Client-side code
+################
+Identifying Vulnerabilities
+  Known Technologies
+  Error messages responses
+  Identify running services
+  Identify running OS
+  Monitor running Applications
+```
+#### Dig vs Whois
+```
+Whois - queries DNS registrar over TCP port 43
+  Information about the owner who registered the domain
+    Whois
+whois zonetransfer.me
+
+Dig - queries DNS server over UDP port 53
+  Name to IP records
+      Dig
+dig zonetransfer.me A
+dig zonetransfer.me AAAA
+dig zonetransfer.me MX
+dig zonetransfer.me TXT
+dig zonetransfer.me NS
+dig zonetransfer.me SOA
+```
+#### Zone Transfer
+```
+Between Primary and Secondary DNS over TCP port 53
+
+https://digi.ninja/projects/zonetransferme.php
+  dir axfr {@soa.server} {target-site}
+  dig axfr @nsztm1.digi.ninja zonetransfer.me
+```
+#### Netcraft
+```
+Similar to whois but web-based
+
+https://sitereport.netcraft.com/
+```
+#### Web-check.xyz
+```
+Checks various information about a website
+
+https://web-check.xyz/
+```
+#### Historical Content
+```
+Wayback Machine
+
+http://archive.org/web/
+```
+#### Google Searches
+```
+Advanced searches.
+List of filters
+Dork Search
+
+site:*.ccboe.net
+
+site:*.ccboe.net "administrator"
+```
+
+#### Shodan
+```
+Shodan: A search engine for Internet-connected devices
+
+https://www.shodan.io
+
+Be aware of attribution
+```
+#### Passive OS Fingerprinter (p0f)
+```
+p0f: Passive scanning of network traffic and packet captures.
+
+  more /etc/p0f/p0f.fp
+  sudo p0f -i eth0
+  sudo p0f -r test.pcap
+```
+#### Social Tactics
+```
+Social Engineering (Hack a person)
+
+Technical based (Email/SMS/Bluetooth)
+
+Other Types (Dumpster Diving/Shoulder Surf)
+```
+
+
+### ACTIVE EXTERNAL DISCOVERY 
+
+#### Scanning Nature
+```
+Active
+
+Passive
+```
+#### Scanning Strategy
+```
+Remote to Local
+
+Local to Remote
+
+Local to Local
+
+Remote to Remote
+```
+#### Scanning Approach
+```
+Aim
+  Wide range target scan
+  Target specific scan
+
+Method
+  Single source scan
+    1-to-1 or 1-to-many
+
+  Distributed scan
+    many-to-one or many-to-many
+```
+
+#### Scanning Approach
+```
+Vertical Scan - Range of ports on 1 box
+
+Horizontal Scan - 1 or many ports on a range of boxes
+```
+#### NMAP Scan Types
+```
+Broadcast Ping/Ping sweep (-sP, -PE)
+
+SYN scan (-sS)
+
+Full connect scan (-sT)
+
+Null scan (-sN)
+
+FIN scan (-sF)
+
+XMAS tree scan (-sX)
+
+UDP scan (-sU)
+
+Idle scan (-sI)
+
+Decoy scan (-D)
+
+ACK/Window scan (-sA)
+
+RPC scan (-sR)
+
+FTP scan (-b)
+
+OS fingerprinting scan (-O)
+
+Version scan (-sV)
+
+Discovery probes
+
+-PE - ICMP Ping
+
+-Pn - No Ping
+
+
+NMAP - Time-Out
+-T0 - Paranoid - 300 Sec
+
+-T1 - Sneaky - 15 Sec
+
+-T2 - Polite - 1 Sec
+
+-T3 - Normal - 1 Sec
+
+-T4 - Aggresive - 500 ms
+
+-T5 - Insane - 250 ms
+
+
+NMAP - Delay
+--scan-delay <time> - Minimum delay between probes
+
+--max-scan-delay <time> - Max delay between probes
+
+
+NMAP - Rate Limit
+--min-rate <number> - Minimum packets per second
+
+--max-rate <number> - Max packets per second
 
 
 
+Traceroute - Firewalking
+traceroute 172.16.82.106
+traceroute 172.16.82.106 -p 123
+sudo traceroute 172.16.82.106 -I
+sudo traceroute 172.16.82.106 -T
+sudo traceroute 172.16.82.106 -T -p 443
+
+
+
+Netcat - Scanning
+nc [Options] [Target IP] [Target Port(s)]
+-z : Port scanning mode i.e. zero I/O mode
+
+-v : Be verbose [use twice -vv to be more verbose]
+
+-n : do not resolve ip addresses
+
+-w1 : Set time out value to 1
+
+-u : To switch to UDP
+
+
+
+Netcat - Horizontal Scanning
+Range of IPs for specific ports
+
+TCP
+for i in {1..254}; do nc -nvzw1 172.16.82.$i 20-23 80 2>&1 & done | grep -E 'succ|open'
+
+UDP
+for i in {1..254}; do nc -nuvzw1 172.16.82.$i 1000-2000 2>&1 &
+
+
+
+Netcat - Vertical Scanning
+Range of ports on specific IP
+
+TCP
+nc -nzvw1 172.16.82.106 21-23 80 2>&1 | grep -E 'succ|open'
+
+UDP
+nc -nuzvw1 172.16.82.106 1000-2000 2>&1 | grep -E 'succ|open'
+
+
+
+Netcat - TCP Scan Script
+
+#!/bin/bash
+echo "Enter network address (e.g. 192.168.0): "
+read net
+echo "Enter starting host range (e.g. 1): "
+read start
+echo "Enter ending host range (e.g. 254): "
+read end
+echo "Enter ports space-delimited (e.g. 21-23 80): "
+read ports
+for ((i=$start; $i<=$end; i++))
+do
+    nc -nvzw1 $net.$i $ports 2>&1 | grep -E 'succ|open'
+done
+
+
+
+Netcat - UDP Scan Script
+
+#!/bin/bash
+echo "Enter network address (e.g. 192.168.0): "
+read net
+echo "Enter starting host range (e.g. 1): "
+read start
+echo "Enter ending host range (e.g. 254): "
+read end
+echo "Enter ports space-delimited (e.g. 21-23 80): "
+read ports
+for ((i=$start; $i<=$end; i++))
+do
+    nc -nuvzw1 $net.$i $ports 2>&1 | grep -E 'succ|open'
+done
+
+
+
+Netcat - Banner Grabbing
+
+Find what is running on a particular port
+
+nc [Target IP] [Target Port]
+nc 172.16.82.106 22
+nc -u 172.16.82.106 53
+-u : To switch to UDP
+```
+#### Curl and Wget
+```
+Both can be used to interact with the HTTP, HTTPS and FTP protocols.
+
+Curl - Displays ASCII
+  curl http://172.16.82.106
+  curl ftp://172.16.82.106
+
+Wget - Downloads (-r recursive)
+  wget -r http://172.16.82.106
+  wget -r ftp://172.16.82.106
+```
+
+### PASSIVE INTERNAL DISCOVERY 
+
+#### Packet Sniffers
+```
+Wireshark
+Tcpdump
+p0f
+
+Limited to traffic in same local area of the network
+```
+
+#### Native Host Tools
+```
+Show TCP/IP network configuration
+
+Windows: ipconfig /all
+Linux: ip address (ifconfig depreciated)
+VyOS: show interface
+```
+
+#### Native Host Tools
+```
+-Show DNS configuration-
+
+Windows: ipconfig /displaydns
+Linux: cat /etc/resolv.conf
+
+
+-Show ARP Cache-
+
+Windows: arp -a
+Linux: ip neighbor (arp -a depreciated)
+
+
+-Show network connections-
+
+Windows: netstat
+Linux: ss (netstat depreciated)
+
+Example options useful for both netstat and ss: -antp
+a = Displays all active connections and ports.
+n = No determination of protocol names. Shows 22 not SSH.
+t = Display only TCP connections.
+u = Display only UDP connections.
+p = Shows which processes are using which sockets
+
+
+-Services File-
+
+Windows: %SystemRoot%\system32\drivers\etc\services
+Linux/Unix: /etc/services
+
+
+-OS Information-
+
+Windows: systeminfo
+Linux: uname -a and /etc/os-release
+
+
+-Show Running Processes-
+
+Windows: tasklist
+Linux: ps or top
+
+Example options useful for ps: -elf
+e = Show all running processes
+l = Show long format view
+f = Show full format listing
+
+
+-Command path-
+
+which
+whereis
+
+
+-Routing Table-
+
+Windows: route print
+Linux: ip route (netstat -r deprecated)
+VyOS: show ip route
+
+
+-File search-
+
+find / -name hint* 2> /dev/null
+find / -iname flag* 2> /dev/null
+```
+
+### ACTIVE INTERNAL DISCOVERY
+
+#### Active Internal Network Reconnaissance
+```
+Will use similar tools as Active External Network Reconnaissance
+
+Scope and addresses may differ
+
+
+-ARP Scanning-
+arp-scan --interface=eth0 --localnet
+
+nmap -sP -PR 172.16.82.96/27
+
+
+-Ping Scanning-
+ping -c 1 172.16.82.106
+
+for i in {1..254}; do (ping -c 1 172.16.82.$i | grep "bytes from" &) ; done
+sudo nmap -sP 172.16.82.96/27
+
+
+-DEV TCP Banner Grab-
+exec 3<>/dev/tcp/172.16.82.106/22; echo -e "" >&3; cat <&3
+
+
+-DEV TCP Scanning-
+for p in {1..1023}; do(echo >/dev/tcp/172.16.82.106/$p) >/dev/null 2>&1 && echo "$p open"; done
+```
+
+
+### PREFORMING NETWORK FORENSICS - MAPPING
+```
+Diagram devices
+
+Line Types
+
+Written Information
+
+Coloring
+
+Groupings
+
+Device type (Router/host)
+
+System Host-names
+
+Interface names (eth0, eth1, etc)
+
+IP address and CIDRs for all interfaces
+
+TCP and UDP ports
+
+MAC Address
+
+OS type/version
+
+Known credentials
+```
+#### Network Mapping Tools
+```
+Draw.io Local (Template)
+
+Draw.io Web
+
+Witeboard.com
+
+Draw.Chat
+
+SmartDraw
+
+Ziteboard
+
+Tutorialspoint Whiteboard
+
+Explain Everything Whiteboard
+
+```
+
+### Reconnaissance Steps
+```
+Network Footprinting
+
+Network Scanning
+
+Network Enumeration
+
+Vulnerability Assessment
+```
+
+#### Network Footprinting
+```
+Collect information relating to target
+
+Network
+
+Systems
+
+Organization
+```
+#### Network Scanning
+```
+Port Scanning
+
+Network Scanning
+
+Vulnerability Scanning
+```
+#### Network Enumeration
+```
+Network Resource and shares
+
+Users and Groups
+
+Routing tables
+
+Auditing and Service settings
+
+Machine names
+
+Applications and banners
+
+SNMP and DNS details
+
+Other common services and ports
+```
+#### Vulnerability Assessment
+```
+Injection
+
+Broken Authentication
+
+Sensitive Data Exposure
+
+XML External Entities
+
+Broken Access Control
+
+Security Misconfiguration
+
+Software/Components with Known Vulnerabilities
+```
+
+
+
+
+## Netcat command
+```
+nc 172.16.20.1 22 (ip then port)
+```
 
 
