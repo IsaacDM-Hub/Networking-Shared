@@ -8,4 +8,5 @@ record types
   TXT TXT record "added by admin with a purpose"
   NS Name server address
   SOA Start of authority address
-  
+  AXFR zone tranfer "all dns records"
+    dir axfr @<soa address | hostname> domain
