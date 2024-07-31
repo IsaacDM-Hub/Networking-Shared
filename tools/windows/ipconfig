@@ -1,0 +1,5 @@
+syntax
+  ipconfig /<option> 
+
+  options
+    /a | /all show ip configurationfor all interfaces
