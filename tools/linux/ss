@@ -1,0 +1,10 @@
+syntax
+  ss -<option>
+
+  options
+    -a display all active connections and ports
+    -n don't resolve protocol names
+    -t only tcp connections
+    -u only udp connections
+    -p show proccesses using sockets
+    
