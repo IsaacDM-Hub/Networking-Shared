@@ -1,0 +1,38 @@
+syntax
+  netcat -<options> <ip address> <port | ports>
+
+  options
+    -z zero I/O "port scanning"
+    -v | -vv verbose or very verbose
+    -n no lookup or do not resolve ip addresses
+    -w1 set time-out to 1
+    -u use udp
+
+
+
+
+
+
+
+
+
+
+
+scripts
+TCP port scanning:
+  # multiple hosts
+  for i in {<start addr>..<end addr>}; do nc -nvzw1 <first three octects>$i <port | ports> 2>&1 & done | grep -E 'succ|open'
+
+  # single host 
+  nc -nzvw1 <ip address> <port | ports> 2>&1 | grep -E 'succ|open'
+
+UDP port scanning:
+  # multiple hosts
+  for i in {<start addr>..<end addr>}; do nc -nuvzw1 <first three octects>$i <port | ports> 2>&1 & done | grep -E 'succ|open'
+  
+  # single host
+  nc -nuzvw1 <ip address> <port | ports> 2>&1 | grep -E 'succ|open'
+
+Banner grabbing:
+  nc <ip address> <port number>
+  
