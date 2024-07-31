@@ -1,0 +1,5 @@
+syntax
+  show <option>
+
+  options
+    interface show ip configuration for all interfaces
