@@ -1,0 +1,11 @@
+syntax
+  traceroute <ip address> -<options>
+
+#! defaults to udp 
+  options
+    -I use icmp
+    -T use tcp
+    -p 
+        UDP: starting destination port number "increments each time"
+        TCP: destination port number "does not increment"
+        ICMP: initial sequence number "increments each time"
