@@ -1,0 +1,5 @@
+syntax
+  uname -<option>
+
+  options
+    -a show all linux system information
