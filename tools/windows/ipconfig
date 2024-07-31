@@ -3,3 +3,4 @@ syntax
 
   options
     /a | /all show ip configurationfor all interfaces
+    /displaydns show dns configuration
