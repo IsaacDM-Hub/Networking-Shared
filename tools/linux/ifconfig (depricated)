@@ -1,0 +1,5 @@
+syntax 
+  ifconfig -<options>
+
+  options
+    -a show ip configuration for all interfaces
