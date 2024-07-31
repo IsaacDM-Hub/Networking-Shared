@@ -3,3 +3,4 @@ syntax
 
   options
     interface show ip configuration for all interfaces
+    "ip route" show routing table
