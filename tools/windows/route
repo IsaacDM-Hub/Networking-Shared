@@ -1,0 +1,5 @@
+syntax
+  route <option>
+
+  options
+    print dump routing table to the screen
