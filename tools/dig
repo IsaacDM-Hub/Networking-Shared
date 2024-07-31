@@ -1,0 +1,11 @@
+syntax
+dig <*domain> <record type>
+
+record types
+  A IPv4 address
+  AAAA IPv6 address
+  MX Mail server address
+  TXT TXT record "added by admin with a purpose"
+  NS Name server address
+  SOA Start of authority address
+  
