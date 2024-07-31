@@ -1,0 +1,7 @@
+syntax
+  ps -<options>
+
+  options
+    -e show all running processes
+    -l show in long list format
+    -f show in full format
