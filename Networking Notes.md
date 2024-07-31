@@ -1,7 +1,7 @@
 # Networking Notes
 
 
-## DAY1 
+## DAY 1 
 ### OSI Model
 ```
 1. Application level Protocol - HTTP, HTTPS, SSH, Telnet, DNS, etc.
