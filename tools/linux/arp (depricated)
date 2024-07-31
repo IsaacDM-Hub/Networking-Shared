@@ -1,0 +1,5 @@
+syntax
+  arp -<options>
+
+  options
+    -a show entire arp cache
