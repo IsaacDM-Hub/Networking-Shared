@@ -3,3 +3,4 @@ syntax
 
   options
     a | address show ip configuration for all interfaces
+    n | neighbor show arp cache
