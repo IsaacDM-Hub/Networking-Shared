@@ -113,6 +113,7 @@ Tunneling Overview
 > 4in6
   > # IPv4 encapsulated in IPv6
 > Teredo
+  > # Uses the 2001:0000::/32 prefix
 > ISATRAP
 
 IPv6 over IPv4
@@ -153,7 +154,8 @@ Types of Covert Channels
 > Timing
   > # Modifying transmissino of legitimate traffic
   > # Watch TTL Changes
-
+> common protocols using covert tunnels
+  > # ICMP, DNS AND HTTP
 
 Detecting covert channels with icmp
 > # ICMP works with one request and one reply answer
