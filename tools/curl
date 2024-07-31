@@ -1,5 +1,5 @@
 syntax
-  curl <protocol>://<fully qualified domain name>
+  curl <protocol>://<fqdn | ip address>
 
 examples
   curl http://172.16.82.106
