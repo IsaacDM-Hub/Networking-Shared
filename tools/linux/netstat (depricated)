@@ -7,3 +7,4 @@ syntax
     -t only tcp connections
     -u only udp connections
     -p show proccesses using sockets
+    -r show routing table
