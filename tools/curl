@@ -1,0 +1,8 @@
+syntax
+  curl <protocol>://<fully qualified domain name>
+
+examples
+  curl http://172.16.82.106
+  curl ftp://172.16.82.106
+  
+    
