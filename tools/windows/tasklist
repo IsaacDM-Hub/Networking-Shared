@@ -1,0 +1,6 @@
+syntax
+  tasklist /<option>
+
+  options
+  /v verbose
+  /svc show services
