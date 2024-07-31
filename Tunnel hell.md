@@ -4,6 +4,7 @@ T1 - 1.1.1.1 (SSH 2222) (USERNAME STUDENT)
 T2 - 2.2.2.2 (TELNET ONLY) (USERNAME STUDENT)
 T3 - 3.3.3.3 (SSH 3333) (USERNAME COMRADE)
 T4 - 4.4.4.4 (SSH 22) (USERNAME COMRADE)
+
 Establish Tunnel Between BLH and T1
 ssh student@1.1.1.1 -L 11201:1.1.1.1:2222 -NT
 Notice the number 11201, this is an important number. It is how you reference this tunnel.
