@@ -1,0 +1,2 @@
+syntax
+  wget -<options> <protocol>://<fqdn | ip address>
