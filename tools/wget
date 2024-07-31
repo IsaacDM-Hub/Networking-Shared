@@ -1,2 +1,9 @@
 syntax
   wget -<options> <protocol>://<fqdn | ip address>
+
+  options
+    -r recusive "when you connect grab everything in the directory"
+
+examples
+  wget -r http://172.16.82.106
+  wget -r ftp://172.16.82.106
