@@ -3551,11 +3551,296 @@ decode from base64 with -d
 
 ```
 
+## DAY 6 PART 2
+### SSH Key Change Fix
+```
+ssh-keygen -f "/home/student/.ssh/known_hosts" -R "172.16.82.106"
+Copy/Paste the ssh-geygen message to remove the Host key from the known_hosts file
+```
+
+#### SSH Options
+```
+-L - Creates a port on the client mapped to a ip:port via the server
+
+-D - Creates a port on the client and sets up a SOCKS4 proxy tunnel where the target ip:port is specified dynamically
+
+-R - Creates the port on the server mapped to a ip:port via the client
+
+-NT - Do not execute a remote command and disable pseudo-tty (will hang window)
+```
+### Local Port Forwarding
+```
+ssh -p <optional alt port> <user>@<server ip> -L <local bind port>:<tgt ip>:<tgt port> -NT
+
+or
+
+ssh -L <local bind port>:<tgt ip>:<tgt port> -p <alt port> <user>@<server ip> -NT
+
+#############
+
+Local Port Forward to localhost of server
+
+Internet_Host:
+ssh student@172.16.1.15 -L 1122:localhost:22
+or
+ssh -L 1122:localhost:22 student@172.16.1.15
 
 
+Internet_Host:
+ssh student@localhost -p 1122
+Blue_DMZ_Host-1~$
 
+###########
 
+Local Port Forward to localhost of server
 
+Internet_Host:
+ssh student@172.16.1.15 -L 1123:localhost:23
+or
+ssh -L 1123:localhost:23 student@172.16.1.15
+
+Internet_Host:
+telnet localhost 1123
+Blue_DMZ_Host-1~$
+
+############
+
+Local Port Forward to localhost of server
+
+Internet_Host:
+ssh student@172.16.1.15 -L 1180:localhost:80
+or
+ssh -L 1180:localhost:80 student@172.16.1.15
+
+Internet_Host:
+firefox http://localhost:1180
+{Webpage of Blue_DMZ_Host-1}
+
+#############
+
+Local Port Forward to remote target via server
+
+Internet_Host:
+ssh student@172.16.1.15 -L 2222:172.16.40.10:22
+or
+ssh -L 2222:172.16.40.10:22 student@172.16.1.15
+
+Internet_Host:
+ssh student@localhost -p 2222
+Blue_INT_DMZ_Host-1~$
+
+###############
+
+Local Port Forward to remote target via server
+
+Internet_Host:
+ssh student@172.16.1.15 -L 2223:172.16.40.10:23
+or
+ssh -L 2223:172.16.40.10:23 student@172.16.1.15
+
+Internet_Host:
+telnet localhost 2223
+Blue_INT_DMZ_Host-1~$
+
+###############
+
+Local Port Forward to remote target via server
+
+Internet_Host:
+ssh student@172.16.1.15 -L 2280:172.16.40.10:80
+or
+ssh -L 2280:172.16.40.10:80 student@172.16.1.15
+
+Internet_Host:
+firefox http://localhost:2280
+{Webpage of Blue_INT_DMZ_Host-1}
+
+###############
+
+Forward through Tunnel
+
+Internet_Host:
+ssh student@172.16.1.15 -L 2222:172.16.40.10:22
+ssh student@localhost -p 2222 -L 3322:172.16.82.106:22
+
+Internet_Host:
+ssh student@localhost -p 3322
+Blue_Host-1~$
+
+#############
+
+Forward through Tunnel
+
+Internet_Host:
+ssh student@172.16.1.15 -L 2222:172.16.40.10:22
+ssh student@localhost -p 2222 -L 3323:172.16.82.106:23
+
+Internet_Host:
+telnet localhost 3323
+Blue_Host-1~$
+
+###############
+
+Forward through Tunnel
+
+Internet_Host:
+ssh student@172.16.1.15 -L 2222:172.16.40.10:22
+ssh student@localhost -p 2222 -L 3380:172.16.82.106:80
+
+Internet_Host:
+firefox http://localhost:3380
+{Webpage of Blue_Host-1}
+
+#########
+
+SSH Dynamic Port Forwarding 2-Step
+
+Internet_Host:
+proxychains ./scan.sh
+proxychains nmap -Pn 172.16.82.96/27 -p 21-23,80
+proxychains ssh student@172.16.82.106
+proxychains telnet 172.16.82.106
+proxychains wget -r http://172.16.82.106
+proxychains wget -r ftp://172.16.82.106
+
+#############
+
+Remote Port Forwarding
+
+ssh -p <optional alt port> <user>@<server ip> -R <remote bind port>:<tgt ip>:<tgt port> -NT
+or
+ssh -R <remote bind port>:<tgt ip>:<tgt port> -p <alt port> <u
+
+##############
+
+Remote Port Forwarding from localhost of client
+
+Blue_DMZ_Host-1:
+ssh student@10.10.0.40 -R 4422:localhost:22
+or
+ssh -R 4422:localhost:22 student@10.10.0.40
+
+Internet_Host:
+ssh student@localhost -p 4422
+Blue_DMZ_Host-1~$
+
+#############
+
+Remote Port Forwarding from localhost of client
+
+Blue_DMZ_Host-1:
+ssh student@10.10.0.40 -R 4423:localhost:23
+or
+ssh -R 4423:localhost:23 student@10.10.0.40
+
+Internet_Host:
+telnet localhost 4423
+Blue_DMZ_Host-1~$
+
+#############
+
+Remote Port Forwarding from localhost of client
+
+Blue_DMZ_Host-1:
+ssh student@10.10.0.40 -R 4480:localhost:80
+or
+ssh -R 4480:localhost:80 student@10.10.0.40
+
+Internet_Host:
+firefox http://localhost:4480
+{Webpage of Blue_DMZ_Host-1}
+
+#############
+
+Remote Port Forwarding to remote target via client
+
+Blue_DMZ_Host-1:
+ssh student@10.10.0.40 -R 5522:172.16.40.10:22
+or
+ssh -R 5522:172.16.40.10:22 student@10.10.0.40
+
+Internet_Host:
+ssh student@localhost -p 5522
+Blue_INT_DMZ_Host-1~$
+
+#############
+
+Remote Port Forwarding to remote target via client
+
+Blue_DMZ_Host-1:
+ssh student@10.10.0.40 -R 5523:172.16.40.10:23
+or
+ssh -R 5523:172.16.40.10:23 student@10.10.0.40
+
+Internet_Host:
+telnet localhost 5523
+Blue_INT_DMZ_Host-1~$
+
+################
+
+Remote Port Forwarding to remote target via client
+
+Blue_DMZ_Host-1:
+ssh student@10.10.0.40 -R 5580:172.16.40.10:80
+or
+ssh -R 5580:172.16.40.10:80 student@10.10.0.40
+
+Internet_Host:
+firefox http://localhost:5580
+{Webpage of Blue_INT_DMZ_Host-1}
+```
+### Combining Local and Remote Port Forwarding
+```
+Bridging Local and Remote Port Forwarding
+
+Internet_Host:
+ssh student@172.16.1.15 -L 2223:172.16.40.10:23 -NT
+or
+ssh -L 2223:172.16.40.10:23 student@172.16.1.15 -NT
+
+Internet_Host:
+telnet localhost 2223
+Blue_INT_DMZ_Host-1~$
+
+############
+
+Bridging Local and Remote Port Forwarding
+
+Blue_INT_DMZ_Host-1:
+ssh student@172.16.1.15 -R 1122:localhost:22
+or
+ssh -R 1122:localhost:22 student@172.16.1.15
+
+############
+
+Bridging Local and Remote Port Forwarding
+
+Internet_Host:
+ssh student@172.16.1.15 -L 2222:localhost:1122
+or
+ssh -L 2222:localhost:1122 student@172.16.1.15
+
+###################
+
+Bridging Local and Remote Port Forwarding
+
+Internet_Host:
+ssh student@localhost -p 2222 -D 9050
+or
+ssh -D 9050 student@localhost -p 2222
+
+###############
+
+Bridging Local and Remote Port Forwarding
+
+Internet_Host:
+proxychains ./scan.sh
+proxychains nmap -Pn -sT 172.16.82.96/27 -p 21-23,80
+proxychains ssh student@172.16.82.106
+proxychains telnet 172.16.82.106
+proxychains wget -r http://172.16.82.106
+proxychains wget -r ftp://172.16.82.106
+```
 
 
 
