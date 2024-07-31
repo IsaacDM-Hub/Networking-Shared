@@ -1,0 +1,5 @@
+syntax 
+  ip <option>
+
+  options
+    a | address show ip configuration for all interfaces
