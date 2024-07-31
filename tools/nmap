@@ -1,0 +1,32 @@
+syntax
+  nmap -<options> <ip address | range>
+
+options
+  -sP ICMP ping sweep
+  -PE tcp ping sweep
+  -Pn do not ping
+  -sS syn or stealth scan
+  -sT full connect scan
+  -sN null scan
+  -sF fin scan
+  -sX xmas tree scan
+  -sU udp scan
+  -sI idle scan "scan from another device"
+  -D decoy scan
+  -sA ack scan
+  -sR rpc scan
+  -b ftp scan
+  -O guess os
+  -sV get service version
+  Time
+    -T0 paranoid 300 seconds
+    -T1 sneaky 15 seconds
+    -T2 polite 1 second 
+    -T3 normal 1 second
+    -T4 aggresive 500 ms
+    -T5 insane 250 ms
+`   --scan-delay <time> Minimum delay between probes
+    --max-scan-delay <time> Max delay between probes
+    --min-rate <number> Minimum packets per second
+    --max-rate <number> Max packets per second
+    
