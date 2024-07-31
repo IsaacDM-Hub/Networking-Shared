@@ -1,0 +1,6 @@
+syntax
+ sudo p0f -<options> <device | file>
+
+options
+  -i interface to capture on
+  -r file to read from
