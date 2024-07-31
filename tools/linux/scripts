@@ -1,0 +1,2 @@
+show dns configuration
+  cat /etc/resolv.conf
