@@ -3842,12 +3842,28 @@ proxychains wget -r http://172.16.82.106
 proxychains wget -r ftp://172.16.82.106
 ```
 
+### STEPS FOR CONNECTIONS SSH TUNNELS
+
+```
+1. ssh -L 1111:localhost:22 cctc@10.50.1.150 -NT(-NT disables terminal)
+2. ssh -L 2222:100.1.1.2:22 cctc@localhost -p 1111 -NT
+3. ssh -p 2222 cctc@localhost -L 3333:192.168.2.2:23 -NT
+4. ssh -R 4444:localhost:22 cctc@192.168.2.1 -NT
+5. ssh cctc@localhost -p 2222 -L 5555:localhost:4444 -NT
+```
+### SYNTAX
+```
+Local: ssh student@B -L 1111:C:23 -NT
+
+Remote: ssh student@B -R 2222:C:22 -NT
+(remote used from the inside, hidden ports, think R is reverse)
 
 
-
-
-
-
+All dynamic tunnels start from your internet host(yourpc)
+ssh -D 9050 cctc@localhost -p 2222 -NT (Dynamic tunnel)
+(You can run the command without the -D 9050, then rerun it after adding the -D)
+(DO NOT PROXY CHAINS TELNET OR SSH!!!!!!!!!!)
+```
 
 
 
