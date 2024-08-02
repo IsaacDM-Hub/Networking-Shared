@@ -3869,12 +3869,32 @@ ssh -D 9050 cctc@localhost -p 2222 -NT (Dynamic tunnel)
 ### SSH with firewall first 
 ```
 telnet 10.50.25.56 23
-ssh student@10.50.38.225 -R 11101:127.0.0.1:22
+ssh student@10.50.38.225 -R 11102:127.0.0.1:22
       (Blue internet host ip and user)
-ssh net1_student11@localhost -p 11101
-
-
+ssh net1_student11@127.0.0.1 -p 11102 -D 9050
+ssh net1_student11@127.0.0.1 -p 11102 -L 11103:10.1.2.18:2222
+ssh net1_student11@127.0.0.1  -p 11103 -D 9050
+ssh net1_student11@127.0.0.1 -p 11103 -L 11104:172.16.10.121:2323
+ssh net1_student11@127.0.0.1  -p 11104 -D 9050
+ssh net1_student11@127.0.0.1 -p 11104 -L 11105:192.168.10.69:22
+ssh net1_student11@127.0.0.1  -p 11105 -D 9050
 ```
+
+
+### Challenge 3
+```
+telnet 10.50.27.147 23
+ssh student@10.50.38.225 -R 11110:127.0.0.1:22
+ssh net1_student11@127.0.0.1 -p 11110 -D 9050
+ssh net1_student11@127.0.0.1 -p 11110 -L 11111:192.168.0
+
+
+
+
+
+
+
+
 
 
 
