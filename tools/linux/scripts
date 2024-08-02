@@ -1,2 +1,5 @@
 show dns configuration
   cat /etc/resolv.conf
+
+ping sweep/scanfor i in {<start>..<end>} ;do (ping -c <first 3 octets>$i | grep "bytes from" &) ;done
+  
