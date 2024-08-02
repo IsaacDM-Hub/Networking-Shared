@@ -3866,7 +3866,15 @@ ssh -D 9050 cctc@localhost -p 2222 -NT (Dynamic tunnel)
 ```
 
 
+### SSH with firewall first 
+```
+telnet 10.50.25.56 23
+ssh student@10.50.38.225 -R 11101:127.0.0.1:22
+      (Blue internet host ip and user)
+ssh net1_student11@localhost -p 11101
 
+
+```
 
 
 
