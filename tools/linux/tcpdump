@@ -1,0 +1,8 @@
+syntax 
+  tcppdump '<berkley packet filter>' -<options>
+
+  options 
+    -X dump packet in hex
+
+  berkley packet filters
+  
