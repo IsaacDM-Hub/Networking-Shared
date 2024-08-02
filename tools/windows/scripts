@@ -1,0 +1,2 @@
+ruby ping sweep
+  for /L %i in (1,1,255) do @ping -n 1 -w 200 <first 3>.%i > nul && echo <first 3>.%i is up.
