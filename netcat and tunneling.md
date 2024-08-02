@@ -314,3 +314,8 @@ Entry Float IP: 10.50.24.91
   > # This opens a tunnel from Target 3 to target 4, since ssh is disabled, telnet into it. Creates port 11202 so it can talk on it. 
 /> ssh net1_student12@localhost -p 11201 -D 9050 -NT
   > # This adds proxychains to 11201.
+
+ssh student@10.50.29.222 -R 11709:127.0.0.1:22 # a reverse tunnel that calls back to my blue host 
+xdg-open 
+ssh student@10.50.29.222 -R 11700:127.0.0.1:22
+proxychains wget -r http://192.168.0.10
