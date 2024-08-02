@@ -158,7 +158,7 @@ Recon Stages
     /> arp-scan --interface=eth0 --localnet
     /> nmap -sP -PR 172.16.82.96/27
   > Ping Scanning
-    /> for i in {1..254}; do (ping -c 1 172.16.82.$i | grep "bytes from" &) ; done (change first 3 octets)
+    /> for i in {1..254}; do (ping -c 1 172.16.82.$i | grep "bytes from" &) 2>/dev/null ; done (change first 3 octets)
       sudo nmap -sP 172.16.82.96/27 works as well but most boxes dont have nmap
 
 Mapping
