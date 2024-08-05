@@ -1,4 +1,4 @@
-TUNNEL TIP
+11700TUNNEL TIP
 > # Two things you need are:
   > # Loopback
   > # Port used for the tunnel
@@ -319,3 +319,19 @@ ssh student@10.50.29.222 -R 11709:127.0.0.1:22 # a reverse tunnel that calls bac
 xdg-open 
 ssh student@10.50.29.222 -R 11700:127.0.0.1:22
 proxychains wget -r http://192.168.0.10
+
+
+
+FUTURAMA
+blue host: ssh net1_student17@10.50.22.43 -p 1234 -L 11700:172.17.17.28:23
+## from phil: ssh 172.17.17.17 -p 1234 -R 11701:127.0.0.1:4321 (telnet first uding port 11700 from blue host)
+## vfrom blue host ssh net1_student17@10.50.22.43 -p 1234 -L 11702:127.0.0.1:11701
+ssh net1_student17@127.0.0.1 -p 11702 (gets onto philip) -L 11703:192.168.30.150:1212
+
+
+
+
+
+
+
+
