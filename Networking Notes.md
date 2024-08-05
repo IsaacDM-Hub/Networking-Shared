@@ -3887,6 +3887,125 @@ telnet 10.50.27.147 23
 ssh student@10.50.38.225 -R 11110:127.0.0.1:22
 ssh net1_student11@127.0.0.1 -p 11110 -D 9050
 ssh net1_student11@127.0.0.1 -p 11110 -L 11111:192.168.0
+```
+
+
+## DAY 7
+### Known Windows and Linux Ports
+```
+Windows
+
+88 - Kerberos / Domain Controller
+
+137/138/139 - NetBIOS
+
+445 - SMB
+
+Linux
+
+22 - SSH
+
+111 - SUN RPC
+```
+
+### Ephemeral Ports
+```
+IANA 49152–65535
+
+Linux 32768–60999
+
+Windows XP 1025–5000
+
+Win 7/8/10 use IANA
+
+Win Server 2008 1025–60000
+
+Sun Solaris 32768–65535
+```
+### Protocol specific identifiers
+```
+HTTP: User-agent strings
+
+SSH: Initial connection
+
+NetBIOS Name Service
+```
+### P0F (Passive OS Fingerprinting)
+```
+Looks at variations in initial TTL, fragmentation flag, default IP header packet length, window size, and TCP options
+
+Configuration stored in:
+
+ /etc/p0f/p0f.fp
+```
+
+### ICMP Tunneling
+```
+ICMP PING uses Type 8 and Type 0
+
+Both should be:
+
+1 for 1
+
+Same size and payload
+
+Look out for:
+
+Request/Reply imbalances
+
+Abnormal/different payloads
+```
+
+### DNS Tunneling
+```
+DNS uses Query/Response
+
+1 Query typically gets 1 response
+
+Look out for:
+
+Query/Response imbalances
+
+Abnormal/different payloads
+
+Continuous Queries
+
+```
+### HTTP(s) Tunneling
+```
+HTTP is "bursty" in nature
+
+Client issues request and the server responds
+
+Look out for:
+
+Steady connections
+
+HTTPs you will need to check session establishment for abnormalities
+```
+
+### Beaconing
+```
+Call back to the C&C server
+
+Gets/sends commands from/to C&C
+
+Look out for:
+
+Beacon Timing
+
+Commonly at regular intervals
+
+Beacon Size
+
+Check-Ins may not have any payloads
+
+Orders will have payloads
+
+```
+
+
+
 
 
 
