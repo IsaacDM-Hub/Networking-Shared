@@ -4005,10 +4005,161 @@ Orders will have payloads
 ```
 
 
+## DAY 8
+###1. Create the Table
+```
+nft add table [family] [table]
+
+  [family] = ip*, ip6, inet, arp, bridge and netdev.
+  [table] = user provided name for the table.
+
+```
+### 2. Create the Base Chain
+```
+nft add chain [family] [table] [chain] { type [type] hook [hook]
+    priority [priority] \; policy [policy] \;}
+
+* [chain] = User defined name for the chain.
+
+* [type] =  can be filter, route or nat.
+
+* [hook] = prerouting, ingress, input, forward, output or
+         postrouting.
+
+* [priority] = user provided integer. Lower number = higher
+             priority. default = 0. Use "--" before
+             negative numbers.
+
+* ; [policy] ; = set policy for the chain. Can be
+              accept (default) or drop.
+
+ Use "\" to escape the ";" in bash
+```
+### 3. Create a rule in the Chain
+```
+nft add rule [family] [table] [chain] [matches (matches)] [statement]
+* [matches] = typically protocol headers(i.e. ip, ip6, tcp,
+            udp, icmp, ether, etc)
+
+* (matches) = these are specific to the [matches] field.
+
+* [statement] = action performed when packet is matched. Some
+              examples are: log, accept, drop, reject,
+              counter, nat (dnat, snat, masquerade)
+```
+
+#### Rule Match options
+```
+ip [ saddr | daddr { ip | ip1-ip2 | ip/CIDR | ip1, ip2, ip3 } ]
+
+tcp flags { syn, ack, psh, rst, fin }
+
+tcp [ sport | dport { port1 | port1-port2 | port1, port2, port3 } ]
+
+udp [ sport| dport { port1 | port1-port2 | port1, port2, port3 } ]
+
+icmp [ type | code { type# | code# } ]
+
+ct state { new, established, related, invalid, untracked }
+
+iif [iface]
+
+oif [iface]
+
+```
+#### Modify NFTables
+```
+nft { list | flush } ruleset
+nft { delete | list | flush } table [family] [table]
+nft { delete | list | flush } chain [family] [table] [chain]
+
+List table with handle numbers
+  nft list table [family] [table] [-a]
+
+Adds after position
+  nft add rule [family] [table] [chain] [position <position>] [matches] [statement]
+
+Inserts before position
+  nft insert rule [family] [table] [chain] [position <position>] [matches] [statement]
+
+Replaces rule at handle
+  nft replace rule [family] [table] [chain] [handle <handle>] [matches] [statement]
+
+Deletes rule at handle
+  nft delete rule [family] [table] [chain] [handle <handle>
+
+To change the current policy
+  nft add chain [family] [table] [chain] { \; policy [policy] \;}
+```
 
 
+### SOURCE NAT
+```
+iptables -t nat -A POSTROUTING -p tcp -o eth0 -s 192.168.0.1 -j SNAT --to 1.1.1.1:9001
 
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 
+```
+### Destination NAT
+```
+iptables -t nat -A PREROUTING -i eth0 -d 8.8.8.8 -j DNAT --to 10.0.0.1
+
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 22 -j DNAT --to 10.0.0.1:22
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j DNAT --to 10.0.0.2:80
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j DNAT --to 10.0.0.3:443
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8080
+```
+### Creating nat tables and chains
+```
+Create the NAT table
+  nft add table ip NAT
+
+Create the NAT chains
+  nft add chain ip NAT PREROUTING { type nat hook prerouting priority 0 \; }
+  nft add chain ip NAT POSTROUTING { type nat hook postrouting priority 0 \; }
+```
+#### Source NAT
+```
+nft add rule ip NAT POSTROUTING ip saddr 10.10.0.40 oif eth0 snat 144.15.60.11
+nft add rule ip NAT POSTROUTING oif eth0 masquerade
+
+```
+#### Destination NAT
+```
+nft add rule ip NAT PREROUTING iif eth0 ip daddr 144.15.60.11 dnat 10.10.0.40
+nft add rule ip NAT PREROUTING iif eth0 tcp dport { 80, 443 } dnat 10.1.0.3
+nft add rule ip NAT PREROUTING iif eth0 tcp dport 80 redirect to 8080
+```
+### Configure iptables mangle rules
+
+```
+iptables -t mangle -A POSTROUTING -o eth0 -j TTL --ttl-set 128
+iptables -t mangle -A POSTROUTING -o eth0 -j DSCP --set-dscp 26
+
+```
+### Configure nftables mangle rules
+```
+nft add table ip MANGLE
+nft add chain ip MANGLE INPUT {type filter hook input priority 0 \; policy accept \;}
+nft add chain ip MANGLE OUTPUT {type filter hook output priority 0 \; policy accept \;}
+nft add rule ip MANGLE OUTPUT oif eth0 ip ttl set 128
+nft add rule ip MANGLE OUTPUT oif eth0 ip dscp set 26
+```
+#### Common iptable options
+```
+-t - Specifies the table. (Default is filter)
+-A - Appends a rule to the end of the list or below specified rule
+-I - Inserts the rule at the top of the list or above specified rule
+-R - Replaces a rule at the specified rule number
+-D - Deletes a rule at the specified rule number
+-F - Flushes the rules in the selected chain
+-L - Lists the rules in the selected chain using standard formatting
+-S - Lists the rules in the selected chain without standard formatting
+-P - Sets the default policy for the selected chain
+-n - Disables inverse lookups when listing rules
+--line-numbers - Prints the rule number when listing rules
+
+```
 
 
 
