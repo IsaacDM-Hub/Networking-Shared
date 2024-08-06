@@ -183,8 +183,25 @@ IPtables Syntax
   > # Table: filter*, nat, mangle
   > # Chain: INPUT, OUTPUT, PREROUTING, POSTROUTING, FORWARD
 
-
-
+## DEMO IPTABLES
+host1: sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT  
+host2: sudo iptables -A OUTPUT -p tcp --sport 22 -j ACCEPT 
+1: sudo iptables -A INPUT -p tcp --sport 22
+1: sudo iptables -A INPUT -p tcp -m multiport --ports 6010,6011,6012 -j ACCEPT 
+1:                  OUTPUT
+sudo iptables -P INPUT DROP (changes default policy)
+                 OUTPUT
+                 FORWARD
+sudo iptables -I INPUT -s 172.16.82.112 -j DROP (anything from the ip you drop)
+                 OUTPUT -d
+sudo iptables -A INPUT -s ip ACCEPT
+                 OUTPUT -d 
+iptables-save > .conf
+sudo iptables -P INPUT ACCEPT (IF NOT CHANGED TO THISBEFORE FLUSHING YOU MAY LOCK OUT THE COMPUTER)
+                  OUTPUT
+                  FORWARD
+              -F
+                 
 IPtables Rules Syntax
 /> -i [ iface ]
 /> -o [ iface ]
@@ -313,11 +330,32 @@ Modify Ntables
 > To change the current policy
 /> nft add chain [family] [table] [chain] { \; policy [policy] \;}
 
+## demo for nftables
+sudo nft add table ip IP4
+sudo nft list ruleset
+nft add chain ip IP4 INPUT { typer filter hook input priority 0 \; policy accept \; } (default policy)
+                     OUTPUT                    output
+sudo nft insert rule ip IP4 INPUT tcp dport 22 accept
+                                      s
+                            OUTPUT    d and s
+sudo nft add chain ip IP4 INPUT { \; policy drop \; } sets default plicy to drop alallalallalalalalalalalalalalalala
+                          OUTPUT
+sudo nft insert rule ip IP4 INPUT ip saddr <ip> drop
+                            OUTPUT   daddr
+                            OUTPUT   daddr <other ip> ACCEPT
+                            INPUT    saddr <other ip> ACCEPT
+sudo nft insert rule ip IP4 INPUT tcp dport { 6010, 6012, 6011 } ct state { new, established } accept
+                            OUTPUT     
+
+
+
+
+
 ======================= NAT Rules ==============================
 Configure IPtables NAT Rules
 > Source NAT
   /> iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-    /> [EXAMPLE] iptables -t nat -A POSTROUTING -p tcp -o eth0 -s 192.168.0.1 -j SNAT --to 1.1.1.1:900
+ ##   /> [EXAMPLE] iptables -t nat -A POSTROUTING -p tcp -o eth0 -s 192.168.0.1 -j SNAT --to 1.1.1.1:9001
 > Destination NAT
   /> iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 22 -j DNAT --to 10.0.0.1:22
   /> iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j DNAT --to 10.0.0.2:80
@@ -342,7 +380,7 @@ Creating NAT Tables and Chains
 ================== Mangle Rules =========================
 Configure IPtables mangle rules
 > Mangle examples with IPtables
-  /> iptables -t mangle -A POSTROUTING -o eth0 -j TTL --ttl-set 128
+ ##  /> iptables -t mangle -A POSTROUTING -o eth0 -j TTL --ttl-set 128
   /> iptables -t mangle -A POSTROUTING -o eth0 -j DSCP --set-dscp 26
 
 
@@ -588,12 +626,12 @@ sudo iptables -A INPUT -p tcp -m multiport --ports 22,23,3389 -m state --state N
 sudo iptables -A OUTPUT -p udp -m multiport --ports 22,23,3389 -m state --state NEW,ESTABLISHED -j ACCEPT
 sudo iptables -A INPUT -p udp -m multiport --ports 22,23,3389 -m state --state NEW,ESTABLISHED -j ACCEPT
 
-sudo iptables -A INPUT -p icmp --icmp-type echo-request -s 10.10.0.40 -j ACCEPT
-sudo iptables -A INPUT -p icmp --icmp-type echo-reply -d 10.10.0.40 -j ACCEPT
-sudo iptables -A OUTPUT -p icmp --icmp-type echo-request -d 10.10.0.40 -j ACCEPT
-sudo iptables -A OUTPUT -p icmp --icmp-type echo-reply -s 10.10.0.40 -j ACCEPT
-sudo iptables -A INPUT -p icmp --icmp-type echo-request -d 10.10.0.40 -j ACCEPT
-sudo iptables -A INPUT -p icmp --icmp-type echo-reply -s 10.10.0.40 -j ACCEPT
+sudo iptables -A INPUT -p icmp --icmp-type echo-request -s 10.10.0.40 -j ACCEPT x
+sudo iptables -A INPUT -p icmp --icmp-type echo-reply -d 10.10.0.40 -j ACCEPT x
+sudo iptables -A OUTPUT -p icmp --icmp-type echo-request -d 10.10.0.40 -j ACCEPT 
+sudo iptables -A OUTPUT -p icmp --icmp-type echo-reply -s 10.10.0.40 -j ACCEPT 
+sudo iptables -A INPUT -p icmp --icmp-type echo-request -d 10.10.0.40 -j ACCEPT 
+sudo iptables -A INPUT -p icmp --icmp-type echo-reply -s 10.10.0.40 -j ACCEPT 
 sudo iptables -A OUTPUT -p icmp --icmp-type echo-request -d 10.10.0.40 -j ACCEPT
 sudo iptables -A OUTPUT -p icmp --icmp-type echo-reply -s 10.10.0.40 -j ACCEPT
 
@@ -612,6 +650,28 @@ sudo iptables -P OUTPUT DROP
 sudo iptables -P FORWARD DROP
 
 467accfb25050296431008a1357eacb1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 T3
 sudo iptables -A INPUT -p tcp -m multiport --ports 22,23,3389 -m state --state NEW,ESTABLISHED -j ACCEPT
