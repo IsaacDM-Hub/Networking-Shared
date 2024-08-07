@@ -12,3 +12,4 @@ alert tcp any any -> 10.0.0.0/8 [137,139,445] (sid:1000008;)
 alert ip any 3389 -> 192.168.65.20 any (sid:1000004;)
 alert tcp any any -> any 22 (msg:"Oh no Intruder!";threshold:type both,track by_src,count 3,seconds 10;sid:1000005;)
 
+ss -nltp
