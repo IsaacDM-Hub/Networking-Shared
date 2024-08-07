@@ -5,7 +5,7 @@ Alt SSH Port: 25
 alert icmp any any -> any any (msg:"Cows"; content:"|DEADBEEF|"; sid:1000001;)
   > # Alers icmp stuff that has content of DEADBEEF in hex
 alert icmp any any -> 10.3.0.0/24 any (msg:"DMZ Ping";itype:8;icode:0;sid:1000002;)
-alert icmp any any -> any any (msg:ICMP detected; sid:111; rev:1;)
+alert icmp any any -> any any (msg:"ICMP detected"; sid:111; rev:1;)
 alert tcp any any -> 10.3.0.0/24 any (flags:0;sid:1000006;)
 alert udp any any -> 10.0.0.0/8 [137,138] (sid:1000007;)
 alert tcp any any -> 10.0.0.0/8 [137,139,445] (sid:1000008;)
