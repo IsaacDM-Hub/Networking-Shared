@@ -4160,12 +4160,164 @@ nft add rule ip MANGLE OUTPUT oif eth0 ip dscp set 26
 --line-numbers - Prints the rule number when listing rules
 
 ```
+## DAY 9
+
+### DEFAULT SNORT LOCATIONS
+```
+Construct advanced IDS (snort) rules
+
+Installation Directory
+  /etc/snort
+
+Configuration File
+  /etc/snort/snort.conf
+
+Rules Directory
+  /etc/snort/rules
+
+Rule naming
+  [name].rules
+
+Default Log Directory
+  /var/log/snort
+
+Common line switches
+
+-D - to run snort as a daemon
+-c - to specify a configuration file when running snort
+-l - specify a log directory
+-r - to have snort read a pcap file
 
 
+To run snort as a Daemon
+  sudo snort -D -c /etc/snort/snort.conf -l /var/log/snort
+To run snort against a PCAP
+  sudo snort -c /etc/snort/rules/file.rules -r file.pcap
+```
+#### Snort IDS/IPS rule - Header
+```
+[action] [protocol] [s.ip] [s.port] [direction] [d.ip] [d.port] ( match conditions ;)
+* Action - alert, log, pass, drop, or reject
+* Protocol - TCP, UDP, ICMP, or IP
+* Source IP address - one IP, network, [IP range], or any
+* Source Port - one, [multiple], any, or [range of ports]
+* Direction - source to destination or both
+* Destination IP address - one IP, network, [IP range], or any
+* Destination port - one, [multiple], any, or [range of ports]
+```
+
+#### Snort IDS/IPS General rule options:
+```
+* msg:"text" - specifies the human-readable alert message
+* reference: - links to external source of the rule
+* sid: - used to uniquely identify Snort rules (required)
+* rev: - uniquely identify revisions of Snort rules
+* classtype: - used to describe what a successful attack would do
+* priority: - level of concern (1 - really bad, 2 - badish, 3 - informational)
+* metadata: - allows a rule writer to embed additional information about the rule
+
+```
+#### Snort IDS/IPS Payload detection options:
+```
+* content:"text" - looks for a string of text.
+* content:"|binary data|" - to look for a string of binary HEX
+* nocase - modified content, makes it case insensitive
+* depth: - specify how many bytes into a packet Snort should search for the
+           specified pattern
+* offset: - skips a certain number of bytes before searching (i.e. offset: 12)
+* distance: - how far into a packet Snort should ignore before starting to
+              search for the specified pattern relative to the end of the
+              previous pattern match
+* within: - modifier that makes sure that at most N bytes are between pattern
+            matches using the content keyword
+
+```
+#### Snort IDS/IPS Non-Payload detection options:
+```
+* flow: - direction (to/from client and server) and state of connection
+         (established, stateless, stream/no stream)
+* ttl: - The ttl keyword is used to check the IP time-to-live value.
+* tos: - The tos keyword is used to check the IP TOS field for a specific value.
+* ipopts: - The ipopts keyword is used to check if a specific IP option is present
+* fragbits: - Check for R|D|M ip flags.
+* dsize: - Test the packet payload size
+* seq: - Check for a specific TCP sequence number
+* ack: - Check for a specific TCP acknowledge number.
+* flags: - Check for E|C|U|A|P|R|S|F|0 TCP flags.
+* itype: - The itype keyword is used to check for a specific ICMP type value.
+* icode: - The icode keyword is used to check for a specific ICMP code value.
+```
+#### Snort IDS/IPS Post detection options:
+```
+* logto: - The logto keyword tells Snort to log all packets that trigger this rule to
+           a special output log file.
+* session: - The session keyword is built to extract user data from TCP Sessions.
+* react: - This keyword implements an ability for users to react to traffic that
+           matches a Snort rule by closing connection and sending a notice.
+* tag: - The tag keyword allow rules to log more than just the single packet that
+         triggered the rule.
+* detection_filter - defines a rate which must be exceeded by a source or destination
+                     host before a rule can generate an event.
+
+```
+
+#### Snort IDS/IPS Thresholding and suppression options:
+```
+threshold: type [limit | threshold | both], track [by_src | by_dst],
+count [#], seconds [seconds]
+
+* limit - alerts on the 1st event during defined period then ignores the rest.
+* threshold - alerts every [x] times during defined period.
+* both - alerts once per time internal after seeing [x] amount of occurrences
+         of event. It then ignores all other events during period.
+* track - rate is tracked either by source IP address, or destination IP address
+* count - number of rule matching in [s] seconds that will cause event_filter
+          limit to be exceeded
+* seconds - time period over which count is accrued. [s] must be nonzero value
+```
+
+#### Snort rule example
+```
+Look for anonymous ftp traffic:
+  alert tcp any any -> any 21 (msg:"Anonymous FTP Login"; content: "anonymous";
+  sid:2121; )
+  
+This will cause the pattern matcher to start looking at byte 6 in the payload)
+  alert tcp any any -> any 21 (msg:"Anonymous FTP Login"; content: "anonymous";
+  offset:5; sid:2121; )
+
+```
+#### Snort rule example
+```
+Look for anonymous ftp traffic:
+  alert tcp any any -> any 21 (msg:"Anonymous FTP Login"; content: "anonymous";
+  sid:2121; )
+
+This will cause the pattern matcher to start looking at byte 6 in the payload)
+  alert tcp any any -> any 21 (msg:"Anonymous FTP Login"; content: "anonymous";
+  offset:5; sid:2121; )
+
+This will search the first 14 bytes of the packet looking for the word “anonymous”.
+  alert tcp any any -> any 21 (msg:"Anonymous FTP Login"; content: "anonymous";
+  depth:14; sid:2121; )
+
+Deactivates the case sensitivity of a text search.
+  alert tcp any any -> any 21 (msg:"Anonymous FTP Login"; content: "anonymous";
+  nocase; sid:2121; )
+
+ICMP ping sweep
+  alert icmp any any -> 10.10.0.40 any (msg: "NMAP ping sweep Scan";
+  dsize:0; itype:8; icode:0; sid:10000004; rev: 1; )
+
+Look for a specific set of Hex bits (NoOP sled)
+  alert tcp any any -> any any (msg:"NoOp sled"; content: "|9090 9090 9090|";
+  sid:9090; rev: 1; )
 
 
+Telnet brute force login attempt
 
-
-
-
-
+  alert tcp any 23 -> any any (msg:"TELNET login incorrect";
+  content:"Login incorrect"; nocase; flow:established, from_server;
+  threshold: type both, track by_src, count 3, seconds 30;
+  classtype: bad-unknown; sid:2323; rev:6; )
+```
