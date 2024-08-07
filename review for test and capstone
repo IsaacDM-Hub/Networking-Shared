@@ -1,0 +1,2 @@
+fin / -iname hint* 2>/dev/null
+find / -iname flag* 2>/dev/null
